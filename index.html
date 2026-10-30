@@ -1,0 +1,1276 @@
+<!DOCTYPE html><html class="light scroll-smooth" lang="pt-BR"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"><meta content="#fbf8f5" name="theme-color"><meta content="web_standard" name="shell-type"><title>VB Massoterapia | Vladia Brito</title><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}
+/* Custom Atmospheric Animations & Micro-interactions */
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-5px) rotate(0.6deg); }
+}
+@keyframes gentlePulseSlow {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.04); opacity: 1; }
+}
+@keyframes warmShimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes breathingQuote {
+  0%, 100% { transform: scale(1); opacity: 0.6; filter: drop-shadow(0 0 0 rgba(200,149,116,0)); }
+  50% { transform: scale(1.08); opacity: 0.95; filter: drop-shadow(0 4px 14px rgba(200,149,116,0.35)); }
+}
+
+.animate-gentle-float {
+  animation: gentleFloat 6s ease-in-out infinite;
+}
+.animate-quote-breathe {
+  animation: breathingQuote 4.5s ease-in-out infinite;
+}
+.shimmer-btn {
+  background-size: 200% auto;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.shimmer-btn:hover {
+  background-position: right center;
+  box-shadow: 0 10px 25px -5px rgba(200,149,116,0.45);
+}
+
+/* Scroll reveal initial states */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Card Transitions */
+.service-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.3s ease, opacity 0.4s ease;
+}
+.service-card:hover {
+  transform: translateY(-6px);
+}
+.service-card.card-hidden {
+  opacity: 0;
+  transform: scale(0.96) translateY(12px);
+  pointer-events: none;
+  position: absolute;
+}
+.service-card.card-visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  position: relative;
+}
+
+/* Accessible reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal-item {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ===== Mobile UX refinements ===== */
+body { -webkit-tap-highlight-color: transparent; }
+section[id] { scroll-margin-top: 6rem; }
+
+#hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(251,248,245,0.97) 0%, rgba(251,248,245,0.90) 55%, rgba(251,248,245,0.72) 100%);
+  display: none;
+}
+@media (max-width: 1023px) {
+  #hero-section::before { display: block; }
+}
+
+#booking-modal-card { max-height: 92vh; max-height: 92dvh; }
+#mobile-menu-panel { touch-action: pan-y; overscroll-behavior: contain; }
+body.menu-open { overflow: hidden; }
+
+.filter-btn { flex: 0 0 auto; scroll-snap-align: start; }
+
+@media (max-width: 639px) {
+  .hero-cta { width: 100%; justify-content: center; }
+  .card-actions button { flex: 1 1 0%; justify-content: center; padding-left: .55rem; padding-right: .55rem; }
+  #custom-booking-form input, #custom-booking-form select, #custom-booking-form textarea,
+  #booking-modal-card input, #booking-modal-card select, #booking-modal-card textarea {
+    font-size: 16px !important;
+  }
+  #hero-section .counter-stat { font-size: 1.6rem; line-height: 1.1; }
+  h2.text-headline-lg { font-size: 2rem; line-height: 2.5rem; }
+}
+/* Preloader VB inspirado na animação líquida Flor de Lotus V55 */
+#preloader-vb{position:fixed;inset:0;width:100%;height:100%;min-height:100svh;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fbf8f5;opacity:1;visibility:visible;transition:opacity .45s cubic-bezier(.65,0,.35,1),visibility .45s}
+#preloader-vb.is-hidden{opacity:0;visibility:hidden;pointer-events:none}
+#preloader-vb .vb-loader-content{position:relative;width:min(280px,76vw);height:min(280px,76vw);display:flex;align-items:center;justify-content:center}
+#preloader-vb .vb-liquid-blob{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 30%,rgba(200,149,116,.16),transparent 50%),radial-gradient(ellipse at 70% 70%,rgba(212,163,115,.14),transparent 50%),radial-gradient(ellipse at 50% 50%,rgba(200,149,116,.08),transparent 60%);border-radius:60% 40% 30% 70%/60% 30% 70% 40%;filter:blur(1px);animation:vbLiquidMorph 3s ease-in-out infinite}
+@keyframes vbLiquidMorph{0%,100%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%;transform:rotate(0) scale(1)}25%{border-radius:40% 60% 70% 30%/40% 60% 30% 70%;transform:rotate(90deg) scale(1.05)}50%{border-radius:30% 70% 40% 60%/70% 30% 60% 40%;transform:rotate(180deg) scale(1.02)}75%{border-radius:70% 30% 60% 40%/30% 70% 40% 60%;transform:rotate(270deg) scale(1.08)}}
+#preloader-vb .vb-liquid-inner{position:absolute;inset:20px;background:radial-gradient(ellipse at 40% 60%,rgba(212,163,115,.12),transparent 45%),radial-gradient(ellipse at 60% 40%,rgba(200,149,116,.09),transparent 45%);border-radius:50%;animation:vbLiquidMorphInner 4s ease-in-out infinite reverse}
+@keyframes vbLiquidMorphInner{0%,100%{border-radius:50% 50% 50% 50%/60% 40% 60% 40%;transform:rotate(0)}50%{border-radius:40% 60% 40% 60%/50% 50% 50% 50%;transform:rotate(180deg)}}
+#preloader-vb .vb-liquid-ring{position:absolute;inset:0;border:1px solid transparent;border-top-color:rgba(200,149,116,.55);border-right-color:rgba(212,163,115,.55);border-radius:50%;opacity:0;animation:vbRingExpand 1.5s cubic-bezier(.22,1,.36,1) infinite}
+#preloader-vb .vb-liquid-ring:nth-child(4){animation-delay:.5s;inset:15px}
+#preloader-vb .vb-liquid-ring:nth-child(5){animation-delay:1s;inset:30px}
+@keyframes vbRingExpand{0%{transform:scale(.3);opacity:0;border-width:2px}20%{opacity:1}100%{transform:scale(1.2);opacity:0;border-width:.5px}}
+#preloader-vb .vb-loader-particles{position:absolute;inset:-20px;pointer-events:none}
+#preloader-vb .vb-loader-particles i{position:absolute;width:5px;height:5px;background:#d4a373;border-radius:50%;opacity:0;filter:blur(.5px);animation:vbParticleFloat 2s ease-in-out infinite}
+#preloader-vb .vb-loader-particles i:nth-child(1){top:10%;left:50%}
+#preloader-vb .vb-loader-particles i:nth-child(2){top:30%;right:15%;animation-delay:.25s;width:4px;height:4px}
+#preloader-vb .vb-loader-particles i:nth-child(3){bottom:10%;left:50%;animation-delay:.5s;width:6px;height:6px}
+#preloader-vb .vb-loader-particles i:nth-child(4){top:50%;left:10%;animation-delay:.75s}
+#preloader-vb .vb-loader-particles i:nth-child(5){top:20%;left:20%;animation-delay:1s;width:3px;height:3px}
+#preloader-vb .vb-loader-particles i:nth-child(6){top:20%;right:20%;animation-delay:1.25s;width:4px;height:4px}
+#preloader-vb .vb-loader-particles i:nth-child(7){bottom:20%;left:20%;animation-delay:1.5s;width:3px;height:3px}
+#preloader-vb .vb-loader-particles i:nth-child(8){bottom:20%;right:20%;animation-delay:1.75s;width:4px;height:4px}
+@keyframes vbParticleFloat{0%,100%{transform:translate(0,0) scale(0);opacity:0}15%{opacity:.8;transform:translate(var(--tx,0),var(--ty,0)) scale(1)}50%{opacity:.4;transform:translate(calc(var(--tx,0)*1.5),calc(var(--ty,0)*1.5)) scale(.8)}85%{opacity:.1;transform:translate(calc(var(--tx,0)*2),calc(var(--ty,0)*2)) scale(.3)}}
+#preloader-vb .vb-loader-logo{position:relative;z-index:5;max-width:72%;max-height:72%;width:auto;height:auto;object-fit:contain;filter:drop-shadow(0 12px 30px rgba(200,149,116,.2));animation:vbLogoLiquidIn 1.1s cubic-bezier(.22,1,.36,1) both}
+@keyframes vbLogoLiquidIn{0%{opacity:0;transform:scale(.3) rotate(-20deg);filter:blur(20px);clip-path:ellipse(0 0 at 50% 50%)}30%{opacity:.3;transform:scale(.7) rotate(-8deg);filter:blur(10px);clip-path:ellipse(40% 40% at 50% 50%)}60%{opacity:.7;transform:scale(1.05) rotate(3deg);filter:blur(3px);clip-path:ellipse(80% 80% at 50% 50%)}100%{opacity:1;transform:scale(1) rotate(0);filter:drop-shadow(0 12px 30px rgba(200,149,116,.2));clip-path:ellipse(100% 100% at 50% 50%)}}
+#preloader-vb .vb-loader-line{position:absolute;top:calc(100% + 18px);left:50%;width:112px;height:2px;transform:translateX(-50%);overflow:hidden}
+#preloader-vb .vb-loader-line:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,#c89574,#d4a373,#c89574,transparent);background-size:200% 100%;transform:scaleX(0);animation:vbLineDraw 1s cubic-bezier(.22,1,.36,1) 1s forwards,vbLineFlow 1.5s linear 2s infinite}
+@keyframes vbLineDraw{to{transform:scaleX(1)}}
+@keyframes vbLineFlow{to{background-position:200% 0}}
+#preloader-vb.is-hidden .vb-loader-logo{animation:vbLogoLiquidOut .4s cubic-bezier(.65,0,.35,1) forwards}
+#preloader-vb.is-hidden .vb-liquid-blob,#preloader-vb.is-hidden .vb-liquid-inner,#preloader-vb.is-hidden .vb-liquid-ring,#preloader-vb.is-hidden .vb-loader-particles,#preloader-vb.is-hidden .vb-loader-line{animation:none;opacity:0}
+@keyframes vbLogoLiquidOut{to{opacity:0;transform:scale(1.3) rotate(15deg);filter:blur(25px);clip-path:ellipse(0 0 at 50% 50%)}}
+@media(prefers-reduced-motion:reduce){#preloader-vb *,#preloader-vb *:before{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+@media (max-width: 1023px) {
+  #hero-section { background-image: none !important; }
+  #hero-section::before { display: none !important; }
+  #hero-section .max-w-7xl { padding-top: 0; }
+  #hero-section .hero-mobile-brand-image img { width: 100%; height: auto; object-fit: contain; object-position: center; }
+}
+</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-container":"#f5efe8","secondary":"#7a6356","on-primary-container":"#3d2315","tertiary-fixed":"#faece3","primary-fixed":"#fae2d3","secondary-fixed":"#f6e4db","surface-container-high":"#ece3da","surface-bright":"#fdfbf9","on-secondary-container":"#6e564a","primary-fixed-dim":"#e8bfab","on-primary-fixed":"#2c1508","on-primary-fixed-variant":"#6b432a","secondary-container":"#f6e5dc","on-background":"#231d19","surface":"#fcfaf8","error-container":"#ffdad6","tertiary":"#8a6d59","on-secondary-fixed-variant":"#533f34","inverse-on-surface":"#f8f4f0","on-secondary-fixed":"#261912","on-tertiary":"#ffffff","surface-container-lowest":"#ffffff","primary-container":"#d4a373","on-secondary":"#ffffff","surface-variant":"#eae1d8","tertiary-container":"#dfc3b1","on-primary":"#ffffff","on-surface-variant":"#5a4a40","on-surface":"#231d19","on-error":"#ffffff","surface-container-low":"#fbf7f4","on-tertiary-fixed-variant":"#5d4231","on-tertiary-container":"#402717","outline":"#8d786c","surface-container-highest":"#e4dad0","primary":"#c89574","secondary-fixed-dim":"#dcbeaf","error":"#ba1a1a","surface-dim":"#dfd5cb","outline-variant":"#daccc1","inverse-surface":"#352d27","background":"#fbf8f5","on-error-container":"#93000a","on-tertiary-fixed":"#27170c","tertiary-fixed-dim":"#e3c3b0","surface-tint":"#c89574","inverse-primary":"#e8beab"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"margin":"3rem","margin-mobile":"1.25rem","gutter-mobile":"1rem","space-xs":"0.375rem","gutter":"1.5rem","space-xl":"3.5rem","space-md":"1.25rem","space-lg":"2rem","space-sm":"0.75rem"},"fontFamily":{"body-lg":["Plus Jakarta Sans"],"headline-lg-mobile":["Playfair Display"],"headline-md":["Playfair Display"],"headline-sm":["Playfair Display"],"body-sm":["Plus Jakarta Sans"],"display-hero-mobile":["Playfair Display"],"label-lg":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"display-hero":["Playfair Display"],"label-md":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"headline-lg":["Playfair Display"],"subheading":["Plus Jakarta Sans"]},"fontSize":{"body-lg":["17px",{"lineHeight":"28px","fontWeight":"400"}],"headline-lg-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"500"}],"headline-md":["28px",{"lineHeight":"36px","fontWeight":"600"}],"headline-sm":["22px",{"lineHeight":"30px","fontWeight":"600"}],"body-sm":["13px",{"lineHeight":"20px","fontWeight":"400"}],"display-hero-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.01em","fontWeight":"500"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.06em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.1em","fontWeight":"600"}],"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.02em","fontWeight":"500"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.08em","fontWeight":"500"}],"body-md":["15px",{"lineHeight":"24px","fontWeight":"400"}],"headline-lg":["40px",{"lineHeight":"48px","letterSpacing":"-0.015em","fontWeight":"500"}],"subheading":["18px",{"lineHeight":"28px","fontWeight":"400"}]}}}};</script><style id="booking-modal-responsive-refinement">
+#booking-modal-backdrop { padding: clamp(8px, 2.5vw, 24px); }
+#booking-modal-card { width: min(100%, 620px); max-height: min(94vh, 94dvh); border-radius: 24px; }
+#booking-modal-card > .relative.bg-gradient-to-r { padding: clamp(14px, 3vw, 24px); gap: 12px; }
+#booking-modal-card > .p-5.sm\:p-6 { padding: clamp(14px, 3vw, 24px); gap: clamp(14px, 2.4vh, 20px); }
+#booking-modal-card label { line-height: 1.35; }
+#booking-modal-card button { min-width: 0; }
+#booking-modal-card .bm-day-btn, #booking-modal-card .bm-slot-btn { min-height: 48px; padding: 10px 8px; overflow-wrap: anywhere; }
+#booking-modal-card .bm-day-btn span { line-height: 1.25; }
+#booking-modal-card input, #booking-modal-card textarea { min-width: 0; max-width: 100%; }
+#booking-modal-card button[onclick="submitBookingToWhatsApp()"] { min-height: 54px; padding: 14px 18px; white-space: normal; line-height: 1.35; }
+@media (max-width: 420px) {
+  #booking-modal-card { border-radius: 20px; }
+  #booking-modal-card > .relative.bg-gradient-to-r { padding: 13px; }
+  #booking-modal-card > .p-5.sm\:p-6 { padding: 14px; gap: 14px; }
+  #booking-modal-card .bm-day-btn { padding: 9px 5px; }
+  #booking-modal-card .bm-day-btn span:last-child { font-size: 11px; }
+  #booking-modal-card .bm-slot-btn { font-size: 11px; padding: 10px 5px; }
+  #booking-modal-card .grid.grid-cols-3 { column-gap: 6px; row-gap: 7px; }
+  #booking-modal-card .grid.grid-cols-2 { column-gap: 7px; row-gap: 7px; }
+  #booking-modal-card button[onclick="submitBookingToWhatsApp()"] { font-size: 11px; letter-spacing: .04em; }
+}
+@media (min-width: 640px) {
+  #booking-modal-card .bm-day-btn, #booking-modal-card .bm-slot-btn { min-height: 54px; }
+}
+@media (max-width: 1023px) {
+  #hero-section .hero-mobile-copy { background: transparent !important; border: 0 !important; box-shadow: none !important; backdrop-filter: none !important; padding: 0 !important; }
+  #hero-section .hero-mobile-brand-image { width: calc(100% + 2rem); max-width: none; margin-left: -1rem; margin-right: -1rem; }
+  #hero-section .hero-mobile-brand-image > img { display: block; width: 100%; max-width: none; height: auto; object-fit: contain; object-position: center; }
+  #hero-section .hero-mobile-copy h1 { text-wrap: pretty; }
+  #hero-section .hero-mobile-copy p { text-wrap: pretty; }
+  #hero-section .hero-copy-content > .inline-flex,
+  #hero-section .hero-copy-content > h1,
+  #hero-section .hero-copy-content > p { display: none !important; }
+  #hero-section .hero-copy-content { gap: 0; }
+}
+</style></head><body class="bg-background font-body-md text-on-surface antialiased overflow-x-hidden selection:bg-primary-fixed selection:text-on-primary-fixed">
+<div id="preloader-vb" aria-hidden="true"><div class="vb-loader-content">
+<div class="vb-liquid-blob"></div><div class="vb-liquid-inner"></div>
+<div class="vb-liquid-ring"></div><div class="vb-liquid-ring"></div><div class="vb-liquid-ring"></div>
+<div class="vb-loader-particles"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<img class="vb-loader-logo" src="imagens/logomarca (1).webp" alt="Logomarca VB Massoterapia" fetchpriority="high" decoding="async">
+<div class="vb-loader-line"></div></div></div><header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(200,149,116,0.08)] border-b border-primary/10 transition-all duration-300" id="main-header"><div class="h-20 w-full px-4 sm:px-6 lg:px-12 flex items-center justify-between gap-3 sm:gap-gutter"><div class="flex items-center gap-space-sm"><a class="relative flex items-center justify-center transition-transform hover:scale-105 duration-300" href="#"><img fetchpriority="high" decoding="async" alt="VB Massoterapia - Vladia Brito" class="h-10 sm:h-12 w-auto object-contain animate-gentle-float" src="imagens/logomarca (1).webp" style="mix-blend-mode: multiply; background: transparent;"></a><div class="flex flex-col"><span class="font-headline-sm text-[20px] sm:text-headline-sm font-semibold tracking-tight text-on-surface whitespace-nowrap">VB Massoterapia</span><span class="font-label-sm text-[10px] sm:text-label-sm uppercase text-primary font-medium tracking-widest whitespace-nowrap">Santuário • 17 Anos</span></div></div><nav class="hidden xl:flex items-center gap-6" data-active-classes="text-on-surface font-semibold"><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-primary after:transition-all after:duration-300" data-path="inicio" href="#">Início</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-primary after:transition-all after:duration-300" data-path="sobre-vladia" href="#sobre-vladia">Sobre Vladia</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-primary after:transition-all after:duration-300" data-path="nossa-essencia" href="#nossa-essencia">Nossa Essência</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-primary after:transition-all after:duration-300" data-path="catalogo" href="#catalogo">Catálogo de Serviços</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-primary after:transition-all after:duration-300" data-path="depoimentos" href="#depoimentos">Depoimentos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 hover:after:w-full after:h-0.5 after:bg-primary after:transition-all after:duration-300" data-path="contato" href="#contato">Contato</a></nav><div class="flex items-center gap-4"><div class="hidden md:flex items-center gap-2"><a class="w-9 h-9 rounded-full flex items-center justify-center bg-surface-container hover:bg-secondary-container transition-all hover:scale-110 active:scale-95 text-on-surface-variant hover:text-primary" href="https://instagram.com/vladiabrittomassoterapia" rel="noopener noreferrer" target="_blank" title="Instagram @vladiabrittomassoterapia"><span class="material-symbols-outlined text-[18px]">photo_camera</span></a><a class="w-9 h-9 rounded-full flex items-center justify-center bg-surface-container hover:bg-secondary-container transition-all hover:scale-110 active:scale-95 text-on-surface-variant hover:text-primary" href="#" rel="noopener noreferrer" target="_blank" title="Facebook"><span class="material-symbols-outlined text-[18px]">public</span></a><a class="w-9 h-9 rounded-full flex items-center justify-center bg-surface-container hover:bg-secondary-container transition-all hover:scale-110 active:scale-95 text-on-surface-variant hover:text-primary" href="https://wa.me/5585992090392" rel="noopener noreferrer" target="_blank" title="WhatsApp (85) 99209-0392"><span class="material-symbols-outlined text-[18px]">chat</span></a></div><button type="button" id="mobile-menu-btn" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="mobile-menu" class="xl:hidden shrink-0 w-11 h-11 rounded-full bg-surface-container hover:bg-secondary-container text-on-surface-variant hover:text-primary flex items-center justify-center transition-all active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"><span class="material-symbols-outlined text-[22px]" id="mobile-menu-icon">menu</span></button></div></div></header><div id="mobile-menu" class="fixed inset-0 z-40 xl:hidden hidden" aria-hidden="true"><div id="mobile-menu-backdrop" class="absolute inset-0 bg-[#231d19]/50 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div><nav id="mobile-menu-panel" aria-label="Menu de navegação mobile" class="absolute left-3 right-3 top-[5.5rem] max-h-[calc(100dvh-7rem)] overflow-y-auto mobile-menu-scroll rounded-3xl bg-surface/95 backdrop-blur-xl border border-primary/20 shadow-2xl p-4 opacity-0 -translate-y-2 transition-all duration-300"><div class="flex flex-col gap-1.5"><a href="#" class="flex items-center justify-between px-4 py-3.5 rounded-2xl text-[15px] font-medium text-on-surface-variant hover:bg-secondary-container/60 hover:text-primary transition-colors min-h-[48px]"><span>Início</span><span class="material-symbols-outlined text-[18px] text-primary/70">arrow_forward</span></a><a href="#sobre-vladia" class="flex items-center justify-between px-4 py-3.5 rounded-2xl text-[15px] font-medium text-on-surface-variant hover:bg-secondary-container/60 hover:text-primary transition-colors min-h-[48px]"><span>Sobre Vladia</span><span class="material-symbols-outlined text-[18px] text-primary/70">arrow_forward</span></a><a href="#nossa-essencia" class="flex items-center justify-between px-4 py-3.5 rounded-2xl text-[15px] font-medium text-on-surface-variant hover:bg-secondary-container/60 hover:text-primary transition-colors min-h-[48px]"><span>Nossa Essência</span><span class="material-symbols-outlined text-[18px] text-primary/70">arrow_forward</span></a><a href="#catalogo" class="flex items-center justify-between px-4 py-3.5 rounded-2xl text-[15px] font-medium text-on-surface-variant hover:bg-secondary-container/60 hover:text-primary transition-colors min-h-[48px]"><span>Catálogo de Serviços</span><span class="material-symbols-outlined text-[18px] text-primary/70">arrow_forward</span></a><a href="#depoimentos" class="flex items-center justify-between px-4 py-3.5 rounded-2xl text-[15px] font-medium text-on-surface-variant hover:bg-secondary-container/60 hover:text-primary transition-colors min-h-[48px]"><span>Depoimentos</span><span class="material-symbols-outlined text-[18px] text-primary/70">arrow_forward</span></a><a href="#contato" class="flex items-center justify-between px-4 py-3.5 rounded-2xl text-[15px] font-medium text-on-surface-variant hover:bg-secondary-container/60 hover:text-primary transition-colors min-h-[48px]"><span>Contato</span><span class="material-symbols-outlined text-[18px] text-primary/70">arrow_forward</span></a></div><div class="mt-4 pt-4 border-t border-primary/15 flex flex-col gap-2.5"><button type="button" onclick="closeMobileMenu(); openBookingModal('Massagem Relaxante')" class="shimmer-btn w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-gradient-to-r from-primary via-[#e0b088] to-primary text-white font-label-lg shadow-lg active:scale-[.98] transition-all"><span class="material-symbols-outlined text-[20px]">calendar_month</span> Agendar Sessão</button><a href="https://wa.me/5585992090392?text=Ol%C3%A1%20Vladia%2C%20gostaria%20de%20agendar%20uma%20sess%C3%A3o." target="_blank" rel="noopener noreferrer" class="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-surface-container hover:bg-secondary-container text-on-surface font-label-lg border border-primary/20 transition-colors"><span class="material-symbols-outlined text-[20px] text-primary">chat</span> Falar no WhatsApp</a></div><div class="mt-4 pt-2 flex items-center justify-center gap-3"><a class="w-11 h-11 rounded-full flex items-center justify-center bg-surface-container hover:bg-secondary-container transition-all active:scale-95 text-on-surface-variant hover:text-primary" href="https://instagram.com/vladiabrittomassoterapia" rel="noopener noreferrer" target="_blank" aria-label="Instagram @vladiabrittomassoterapia"><span class="material-symbols-outlined text-[20px]">photo_camera</span></a><a class="w-11 h-11 rounded-full flex items-center justify-center bg-surface-container hover:bg-secondary-container transition-all active:scale-95 text-on-surface-variant hover:text-primary" href="https://wa.me/5585992090392" rel="noopener noreferrer" target="_blank" aria-label="WhatsApp (85) 99209-0392"><span class="material-symbols-outlined text-[20px]">chat</span></a></div></nav></div><main class="w-full pt-20 bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- HERO SECTION -->
+<section id="hero-section" class="relative w-full overflow-hidden from-[#f7f0e8] via-surface to-background pb-space-lg sm:pb-space-xl" style="background-image: linear-gradient(to right, rgba(251, 248, 245, 0.94) 0%, rgba(251, 248, 245, 0.85) 42%, rgba(251, 248, 245, 0.15) 75%, rgba(251, 248, 245, 0.05) 100%), url(&quot;imagens/banner.webp&quot;); background-size: cover; background-position: right center; background-repeat: no-repeat;">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-space-lg sm:py-space-xl">
+<div class="hero-mobile-brand-image lg:hidden -mx-4 sm:-mx-6 mb-6 w-[calc(100%+2rem)] sm:w-[calc(100%+3rem)] h-auto overflow-visible relative">
+<img src="imagens/banner mobile.webp" alt="Banner mobile VB Massoterapia com logomarca, flores e ambiente de spa" class="block w-full max-w-none h-auto object-contain object-center" fetchpriority="high" decoding="async">
+<div class="hero-mobile-copy absolute left-[4%] right-[4%] bottom-[5%] text-left flex flex-col gap-4">
+<div class="inline-flex self-start items-center gap-1.5 text-[#352d27] text-[13px] font-bold uppercase tracking-[.12em]"><span class="material-symbols-outlined text-[15px] text-[#c89574]">spa</span>Santuário de Bem-Estar Exclusivo</div>
+<h1 class="font-headline-lg text-[34px] leading-[1.08] text-[#1b1c1a] font-bold tracking-tight max-w-full">17 Anos de Cuidado, Alívio e Conexão com Seu <span class="italic text-[#c89574] font-medium">Bem-Estar</span></h1>
+<p class="text-[17px] leading-[1.4] text-[#352d27] font-medium max-w-full">Massoterapia personalizada para restaurar o equilíbrio do seu corpo e mente em um ambiente acolhedor, sereno e exclusivo com toque consciente.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center">
+<!-- Text & Value Prop -->
+<div class="lg:col-span-6 flex flex-col z-10"><div class="flex flex-col gap-space-md max-w-2xl z-10 reveal-item is-visible hero-copy-content">
+<div class="inline-flex items-center gap-2 self-start px-4 py-1.5 rounded-full border border-primary/30 text-on-surface bg-white/40 backdrop-blur-sm drop-shadow-sm transition-transform hover:scale-105 duration-300">
+<span class="material-symbols-outlined text-[18px] text-primary" style="font-variation-settings: &quot;FILL&quot; 1;">spa</span>
+<span class="font-label-sm uppercase tracking-widest font-bold text-[#231d19]">Santuário de Bem-Estar Exclusivo</span>
+</div>
+<h1 class="font-headline-lg text-[32px] leading-[40px] sm:text-headline-lg sm:leading-[48px] lg:text-[48px] lg:leading-[56px] text-[#1b1c1a] font-bold tracking-tight drop-shadow-sm">
+    17 Anos de Cuidado, Alívio e Conexão com Seu <span class="italic text-primary font-medium">Bem-Estar</span>
+</h1>
+<p class="font-body-md sm:font-body-lg text-[15px] sm:text-body-lg text-[#352d27] font-medium max-w-xl leading-relaxed drop-shadow-sm">
+    Massoterapia personalizada para restaurar o equilíbrio do seu corpo e mente em um ambiente acolhedor, sereno e exclusivo com toque consciente.
+  </p>
+<div class="flex flex-wrap items-center gap-3 sm:gap-4 pt-2 relative z-30">
+<button type="button" onclick="openBookingModal('Massagem Relaxante')" class="hero-cta shimmer-btn inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 rounded-full bg-gradient-to-r from-primary via-[#e0b088] to-primary text-white font-label-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 active:scale-95 cursor-pointer"><span class="material-symbols-outlined text-[20px] text-white">calendar_month</span><span class="">Agendar Sessão</span></button>
+<a class="hero-cta inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-surface-container/80 hover:bg-surface-container text-[#231d19] font-label-lg transition-all border border-primary/20 backdrop-blur-sm hover:scale-105 active:scale-95 cursor-pointer" href="#catalogo">
+<span class="">Conhecer Nossos Tratamentos</span>
+<span class="material-symbols-outlined text-[18px] transition-transform duration-300 group-hover:translate-y-1">arrow_downward</span>
+</a>
+</div>
+<div class="grid grid-cols-3 gap-3 sm:gap-6 pt-4 mt-2 border-t border-primary/20">
+<div class="flex flex-col text-left group cursor-default">
+<span class="font-headline-md text-[24px] sm:text-headline-md leading-none text-primary font-bold drop-shadow-sm transition-transform duration-300 group-hover:scale-105 origin-left counter-stat" data-suffix="+" data-target="17">17+</span>
+<span class="font-label-sm text-[#231d19] font-bold uppercase tracking-wider text-[11px] leading-tight mt-1">Anos de Maestria</span>
+</div>
+<div class="flex flex-col text-left group cursor-default">
+<span class="font-headline-md text-[24px] sm:text-headline-md leading-none text-primary font-bold drop-shadow-sm transition-transform duration-300 group-hover:scale-105 origin-left counter-stat" data-suffix="%" data-target="100">100%</span>
+<span class="font-label-sm text-[#231d19] font-bold uppercase tracking-wider text-[11px] leading-tight mt-1">Individualizado</span>
+</div>
+<div class="flex flex-col text-left group cursor-default">
+<span class="font-headline-md text-[24px] sm:text-headline-md leading-none text-primary font-bold drop-shadow-sm transition-transform duration-300 group-hover:scale-105 origin-left counter-stat" data-suffix=".0★" data-target="5">5.0★</span>
+<span class="font-label-sm text-[#231d19] font-bold uppercase tracking-wider text-[11px] leading-tight mt-1">Excelência Clínica</span>
+</div>
+</div>
+</div></div>
+<!-- Hero Visual Showcase -->
+<div class="lg:col-span-6 relative flex items-center justify-center"><div class="hidden lg:block w-full min-h-[360px] pointer-events-none"></div></div>
+</div>
+</div>
+</section>
+<!-- HIGHLIGHT RIBBON -->
+<section class="w-full bg-[#f4ece3] py-space-md border-y border-primary/10">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-wrap items-center justify-start sm:justify-between gap-4 sm:gap-6 reveal-item is-visible">
+<div class="flex items-center gap-3 transition-transform hover:-translate-y-0.5 duration-200">
+<span class="material-symbols-outlined text-primary text-[24px]">self_improvement</span>
+<span class="font-label-lg text-on-surface">Dissolução de Contraturas e Fadiga</span>
+</div>
+<div class="flex items-center gap-3 transition-transform hover:-translate-y-0.5 duration-200">
+<span class="material-symbols-outlined text-primary text-[24px]">clean_hands</span>
+<span class="font-label-lg text-on-surface">Toque Consciente e Terapêutico</span>
+</div>
+<div class="flex items-center gap-3 transition-transform hover:-translate-y-0.5 duration-200">
+<span class="material-symbols-outlined text-primary text-[24px]">nature_people</span>
+<span class="font-label-lg text-on-surface">Insumos Botânicos e Orgânicos</span>
+</div>
+<div class="flex items-center gap-3 transition-transform hover:-translate-y-0.5 duration-200">
+<span class="material-symbols-outlined text-primary text-[24px]">lock</span>
+<span class="font-label-lg text-on-surface">Privacidade &amp; Silêncio Absoluto</span>
+</div>
+</div>
+</section>
+<!-- SECTION: ABOUT VLADIA BRITO -->
+<section class="w-full py-space-lg sm:py-space-xl bg-background relative overflow-hidden" id="sobre-vladia">
+<!-- Soft decorative watermark background -->
+<div class="absolute -left-20 top-1/2 -translate-y-1/2 w-96 h-96 opacity-[0.035] pointer-events-none select-none">
+<img loading="lazy" decoding="async" alt="" class="w-full h-full object-contain" src="imagens/002.webp">
+</div>
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-space-xl items-center">
+<!-- Unique Single Portrait Composition with Organic Rose Gold Arch & Background Shapes (NO DARK BG) -->
+<div class="lg:col-span-5 relative flex flex-col items-center justify-center reveal-item is-visible">
+<div class="relative w-full max-w-[380px] sm:max-w-[420px] aspect-[4/5] flex items-center justify-center group">
+<!-- Decorative Soft Nude & Rose Gold Backing Shapes -->
+<div class="absolute inset-0 rounded-[42px] bg-gradient-to-br from-[#f8f1eb] via-[#f3ebe3] to-[#ebdccf] shadow-[0_20px_50px_rgba(200,149,116,0.18)] border border-[#d4a373]/30 transition-all duration-500 group-hover:shadow-[0_25px_60px_rgba(200,149,116,0.25)]"></div>
+<!-- Outer Architectural Organic Arch Line -->
+<div class="absolute -top-3 -left-3 -right-3 -bottom-3 rounded-[48px] border border-[#d4a373]/25 pointer-events-none transition-transform duration-700 group-hover:scale-[1.02]"></div>
+<!-- Subtle Soft Ambient Halo -->
+<div class="absolute -inset-4 bg-gradient-to-tr from-[#fae2d3]/40 via-[#f5ded2]/20 to-[#ecd8c8]/50 rounded-full blur-2xl -z-10 animate-pulse"></div>
+<!-- Delicate Botanical Spa Flourish Vector / Accent Elements -->
+<div class="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/70 backdrop-blur-md flex items-center justify-center text-primary shadow-sm border border-[#d4a373]/25 z-20 animate-gentle-float pointer-events-none">
+<span class="material-symbols-outlined text-[24px]">spa</span>
+</div>
+<!-- Elegant Watermark Emblem inside Backdrop -->
+<div class="absolute bottom-6 left-6 w-24 h-24 opacity-15 pointer-events-none select-none z-0"><img loading="lazy" decoding="async" alt="" class="w-full h-full object-contain" src="imagens/logomarca (1).webp" style="mix-blend-mode: multiply; background: transparent;"></div>
+<!-- Pure Single Photo of Vladia Brito (No Black Background, Clean Silhouette) -->
+<div class="relative z-10 w-full h-full p-4 pb-0 flex items-end justify-center overflow-hidden rounded-[38px]">
+<img loading="lazy" decoding="async" alt="Vladia Brito especialista em massoterapia" class="w-full h-[105%] object-contain object-bottom drop-shadow-[0_12px_24px_rgba(110,86,74,0.18)] transition-transform duration-700 group-hover:scale-105" src="imagens/profissional.webp">
+</div>
+<!-- Floating Premium Credential Badge (Rose Gold & Nude) -->
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[92%] z-20 p-3.5 rounded-2xl bg-white/95 backdrop-blur-md shadow-xl border border-[#d4a373]/30 flex items-center justify-between transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 flex items-center justify-center"><img loading="lazy" decoding="async" alt="VB" class="w-8 h-8 object-contain animate-gentle-float" src="imagens/logomarca (1).webp" style="mix-blend-mode: multiply; background: transparent;"></div>
+<div>
+<span class="font-headline-sm text-[17px] font-semibold text-on-surface block leading-tight">Vladia Brito</span>
+<span class="font-label-sm text-primary uppercase tracking-widest text-[10px] font-semibold">Terapeuta Corporal • 17 Anos</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[22px]" style="font-variation-settings: &quot;FILL&quot; 1;">workspace_premium</span>
+</div>
+</div>
+</div>
+<!-- Holistic Narrative -->
+<div class="lg:col-span-7 flex flex-col gap-space-md pl-0 lg:pl-4 pt-6 lg:pt-0 reveal-item is-visible">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[20px]">filter_vintage</span>
+<span class="font-label-md uppercase tracking-widest font-semibold">O Templo do Bem-Estar</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-semibold leading-tight">
+            Vladia Brito — Especialista em Massoterapia e Terapias Integrativas
+          </h2>
+<p class="font-subheading text-subheading text-on-surface-variant font-light italic">
+            "O corpo guarda todas as nossas memórias e tensões. Minha missão é acolher essa história e devolver leveza, fluidez e serenidade aos seus movimentos."
+          </p>
+<p class="font-body-md text-body-md text-secondary">
+            Com 17 anos dedicados integralmente à promoção da saúde, relaxamento profundo e alívio de dores crônicas, Vladia combina técnicas tradicionais e abordagens terapêuticas modernas para um cuidado personalizado, respeitoso e restaurador. Cada sessão é desenhada após minuciosa escuta dos sinais do corpo, adaptando pressão, temperatura e manobras ao momento específico do paciente.
+          </p>
+<!-- 4 Pillars of Mastery -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+<div class="p-4 rounded-xl bg-surface-container-low border border-[#d4a373]/20 flex items-start gap-3.5 transition-all duration-300 hover:shadow-md hover:bg-white hover:-translate-y-1">
+<span class="material-symbols-outlined text-primary text-[22px] mt-0.5">health_and_safety</span>
+<div>
+<h4 class="font-label-lg text-on-surface font-semibold">Alívio de Dores Crônicas</h4>
+<p class="font-body-sm text-secondary">Descompressão fascial e liberação de pontos-gatilho dolorosos.</p>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-low border border-[#d4a373]/20 flex items-start gap-3.5 transition-all duration-300 hover:shadow-md hover:bg-white hover:-translate-y-1">
+<span class="material-symbols-outlined text-primary text-[22px] mt-0.5">accessibility_new</span>
+<div>
+<h4 class="font-label-lg text-on-surface font-semibold">Saúde e Postura Harmoniosa</h4>
+<p class="font-body-sm text-secondary">Ajustes posturais e realinhamento biomecânico preventivo.</p>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-low border border-[#d4a373]/20 flex items-start gap-3.5 transition-all duration-300 hover:shadow-md hover:bg-white hover:-translate-y-1">
+<span class="material-symbols-outlined text-primary text-[22px] mt-0.5">waves</span>
+<div>
+<h4 class="font-label-lg text-on-surface font-semibold">Drenagem &amp; Desintoxicação</h4>
+<p class="font-body-sm text-secondary">Estímulo do sistema linfático com toques rítmicos milenares.</p>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-low border border-[#d4a373]/20 flex items-start gap-3.5 transition-all duration-300 hover:shadow-md hover:bg-white hover:-translate-y-1">
+<span class="material-symbols-outlined text-primary text-[22px] mt-0.5">energy_savings_leaf</span>
+<div>
+<h4 class="font-label-lg text-on-surface font-semibold">Equilíbrio Energético Global</h4>
+<p class="font-body-sm text-secondary">Harmonização dos meridianos e serenidade mental duradoura.</p>
+</div>
+</div>
+</div>
+<div class="pt-2">
+<a class="inline-flex items-center gap-2 font-label-lg text-primary hover:text-[#ba825e] transition-all group font-semibold" href="https://wa.me/5585992090392?text=Ol%C3%A1%20Vladia%2C%20gostaria%20de%20conversar%20sobre%20o%20meu%20caso%20e%20agendar." rel="noopener noreferrer" target="_blank">
+<span class="">Conversar diretamente com Vladia Brito</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1.5 transition-transform duration-300">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION: ESSÊNCIA COM MOSAICO DE 4 FOTOS -->
+<section class="w-full py-space-lg sm:py-space-xl bg-[#f7f2ec] overflow-hidden border-t border-primary/10" id="nossa-essencia">
+<div class="max-w-7xl mx-auto px-6 lg:px-12">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-space-xl items-center">
+<!-- Coluna da Esquerda: Mosaico Assimétrico de 4 Imagens Estilo Referência -->
+<div class="lg:col-span-6 grid grid-cols-2 gap-4 sm:gap-6 items-start reveal-item is-visible">
+<!-- Coluna Mosaico 1 (Esquerda) -->
+<div class="flex flex-col gap-4 sm:gap-6">
+<!-- Imagem 1: Pedras basálticas e botânicos aromáticos -->
+<div class="rounded-3xl overflow-hidden shadow-md aspect-square bg-surface-container group border border-primary/15 transition-all duration-500 hover:shadow-xl">
+<img loading="lazy" decoding="async" alt="Pedras basálticas, eucalipto fresco e óleos botânicos" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="imagens/002.webp">
+</div>
+<!-- Imagem 3: Frasco fosco com sérum botânico e óleo puro -->
+<div class="rounded-3xl overflow-hidden shadow-md aspect-[3/4] bg-surface-container group border border-primary/15 transition-all duration-500 hover:shadow-xl">
+<img loading="lazy" decoding="async" alt="Aplicação de óleo essencial aquecido com toque terapêutico e ritualístico" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="imagens/002.webp">
+</div>
+</div>
+<!-- Coluna Mosaico 2 (Direita, com deslocamento vertical sutil) -->
+<div class="flex flex-col gap-4 sm:gap-6 pt-6 sm:pt-10">
+<!-- Imagem 2: Ambiente e santuário arquitetônico de spa -->
+<div class="rounded-3xl overflow-hidden shadow-md aspect-[3/4] bg-surface-container group border border-primary/15 transition-all duration-500 hover:shadow-xl">
+<img loading="lazy" decoding="async" alt="Toque terapêutico e manobras precisas de massoterapia em close-up" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="imagens/003.webp">
+</div>
+<!-- Imagem 4: Massagem terapêutica com toque consciente -->
+<div class="rounded-3xl overflow-hidden shadow-md aspect-square bg-surface-container group border border-primary/15 transition-all duration-500 hover:shadow-xl">
+<img loading="lazy" decoding="async" alt="Toque terapêutico cuidadoso e consciente em ambiente sereno" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="imagens/004.webp">
+</div>
+</div>
+</div>
+<!-- Coluna da Direita: Narrativa Editorial e Pilares Conceituais -->
+<div class="lg:col-span-6 flex flex-col gap-6 reveal-item is-visible">
+<div class="flex flex-col gap-2">
+<span class="font-label-sm uppercase tracking-widest text-primary font-semibold">NOSSA ESSÊNCIA</span>
+<h2 class="font-headline-lg text-headline-lg lg:text-[44px] lg:leading-[52px] text-on-surface font-semibold tracking-tight">
+            A Filosofia do Cuidado Sensorial &amp; Terapêutico
+          </h2>
+</div>
+<div class="flex flex-col gap-4 text-on-surface-variant font-body-md leading-relaxed">
+<p class="">
+            Acreditamos que o verdadeiro alívio e a restauração emergem da escuta atenta do corpo. A VB Massoterapia não é apenas um espaço de atendimento; é um refúgio acolhedor onde o ritmo acelerado da rotina dá lugar à presença, ao silêncio e à reconexão consciente.
+          </p>
+<p class="text-secondary">
+            Com 17 anos de maestria clínica desenvolvida por Vladia Brito, cada protocolo harmoniza toques ancestrais, alinhamento biomecânico e fitoterapia pura. Nossa abordagem cuida da fáscia, da musculatura e do sistema nervoso como uma sinfonia integrada.
+          </p>
+</div>
+<!-- 3 Diferenciais Lineares com Ícones Refinados -->
+<div class="flex flex-col gap-4 pt-2 border-t border-primary/20">
+<div class="flex items-center gap-3.5 transition-transform hover:translate-x-1 duration-200">
+<div class="w-10 h-10 rounded-full bg-secondary-container/80 border border-primary/25 flex items-center justify-center flex-shrink-0 text-primary shadow-sm">
+<span class="material-symbols-outlined text-[20px]">spa</span>
+</div>
+<span class="font-label-lg text-on-surface font-medium">Atendimento 100% Individualizado &amp; Rituais Sob Medida</span>
+</div>
+<div class="flex items-center gap-3.5 transition-transform hover:translate-x-1 duration-200">
+<div class="w-10 h-10 rounded-full bg-secondary-container/80 border border-primary/25 flex items-center justify-center flex-shrink-0 text-primary shadow-sm">
+<span class="material-symbols-outlined text-[20px]">verified</span>
+</div>
+<span class="font-label-lg text-on-surface font-medium">17 Anos de Prática Clínica e Respeito aos Limites do Corpo</span>
+</div>
+<div class="flex items-center gap-3.5 transition-transform hover:translate-x-1 duration-200">
+<div class="w-10 h-10 rounded-full bg-secondary-container/80 border border-primary/25 flex items-center justify-center flex-shrink-0 text-primary shadow-sm">
+<span class="material-symbols-outlined text-[20px]">opacity</span>
+</div>
+<span class="font-label-lg text-on-surface font-medium">Óleos Vegetais Nobres, Fitocosméticos Puros e Hipoalergênicos</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION: SERVICES CATALOG (3 THEMATIC CATEGORIES) -->
+<section class="w-full py-space-lg sm:py-space-xl bg-surface-container-low" id="catalogo">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col gap-space-lg">
+<!-- Section Header with Category Filter Buttons -->
+<div class="flex flex-col items-center text-center gap-6 reveal-item is-visible"><div class="max-w-2xl flex flex-col items-center"><div class="flex items-center justify-center gap-2 text-primary mb-1"><span class="material-symbols-outlined text-[20px] animate-gentle-float">spa</span><span class="font-label-md uppercase tracking-widest font-semibold">Menu Terapêutico Completo</span></div><h2 class="font-headline-lg text-headline-lg text-on-surface font-semibold">Catálogo de Serviços e Procedimentos</h2><p class="font-body-md text-secondary mt-2">Protocolos cuidadosamente desenvolvidos com 17 anos de experiência clínica para acolher as necessidades singulares de cada corpo.</p></div><div class="flex flex-nowrap md:flex-wrap items-center justify-start md:justify-center gap-2 p-1.5 bg-[#ede4da] rounded-2xl sm:rounded-full border border-[#dccdc0] w-full md:w-auto md:max-w-fit mx-auto shadow-inner overflow-x-auto mobile-menu-scroll snap-x"><button class="filter-btn px-5 py-2.5 text-xs md:text-sm font-semibold rounded-full transition-all duration-300 bg-[#352d27] text-white shadow-md whitespace-nowrap active:scale-95 cursor-pointer" id="btn-all" onclick="filterCategory('all')">Todos (11)</button><button class="filter-btn px-5 py-2.5 text-xs md:text-sm font-medium rounded-full transition-all duration-300 text-[#7c6f64] hover:text-[#2c2520] hover:bg-[#dfd3c5] whitespace-nowrap active:scale-95 cursor-pointer" id="btn-relax" onclick="filterCategory('relax')">Relaxamento (4)</button><button class="filter-btn px-5 py-2.5 text-xs md:text-sm font-medium rounded-full transition-all duration-300 text-[#7c6f64] hover:text-[#2c2520] hover:bg-[#dfd3c5] whitespace-nowrap active:scale-95 cursor-pointer" id="btn-terapia" onclick="filterCategory('terapia')">Terapias Corporais (5)</button><button class="filter-btn px-5 py-2.5 text-xs md:text-sm font-medium rounded-full transition-all duration-300 text-[#7c6f64] hover:text-[#2c2520] hover:bg-[#dfd3c5] whitespace-nowrap active:scale-95 cursor-pointer" id="btn-drenagem" onclick="filterCategory('drenagem')">Drenagem &amp; Podal (2)</button></div></div>
+<!-- Services Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter transition-all duration-500" id="services-grid"><!-- CARD 1: Massagem Relaxante -->
+<div class="service-card reveal-item is-visible flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:border-primary/50 transition-all duration-300 group border border-[#ebe3da]" data-cat="relax" data-service="massagem-relaxante" style="display: flex; transform: translateY(0px) scale(1);" data-stitch-orig-opacity="1">
+<div class="relative aspect-[16/10] overflow-hidden bg-surface-container-high cursor-pointer" onclick="openServiceModal('massagem-relaxante')">
+<img loading="lazy" decoding="async" alt="Massagem Relaxante" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="imagens/Massagem Relaxante (1).webp">
+<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-surface-bright/95 backdrop-blur text-primary font-label-sm font-bold uppercase tracking-wider border border-primary/20 text-[11px] shadow-sm">Relaxamento</span>
+</div>
+<div class="p-4 sm:p-6 flex flex-col flex-1 justify-between gap-4">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between gap-2">
+<h3 class="font-headline-sm text-[20px] leading-tight text-on-surface font-semibold group-hover:text-primary transition-colors cursor-pointer" onclick="openServiceModal('massagem-relaxante')">Massagem Relaxante</h3>
+<span class="text-xs font-medium text-[#8c786a] bg-[#f4eee7] px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap">60 ou 90 min</span>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed">Manobras suaves, deslizamentos rítmicos e óleos essenciais aquecidos para dissolver o estresse físico e mental em profundidade.</p>
+</div>
+<div class="card-actions pt-4 flex items-center justify-between border-t border-primary/10 gap-2">
+<button type="button" onclick="openServiceModal('massagem-relaxante')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#f3ded6] hover:bg-[#ebdccf] text-[#352d27] border border-[#d4a373]/30 flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-primary">visibility</span> Ver Detalhes
+</button>
+<button type="button" onclick="openBookingModal('Massagem Relaxante')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#352d27] hover:bg-primary text-white flex items-center gap-1.5 transition-all duration-300 active:scale-95 shadow-sm hover:shadow cursor-pointer"><span class="material-symbols-outlined text-[16px]">calendar_month</span> Agendar</button>
+</div>
+</div>
+</div>
+
+<!-- CARD 2: Tay Massagem -->
+<div class="service-card reveal-item is-visible flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:border-primary/50 transition-all duration-300 group border border-[#ebe3da]" data-cat="relax" data-service="tay-massagem" style="display: flex; transform: translateY(0px) scale(1);" data-stitch-orig-opacity="1">
+<div class="relative aspect-[16/10] overflow-hidden bg-surface-container-high cursor-pointer" onclick="openServiceModal('tay-massagem')">
+<img loading="lazy" decoding="async" alt="Tay Massagem Tradicional" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="imagens/Tay Massagem.webp">
+<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-surface-bright/95 backdrop-blur text-primary font-label-sm font-bold uppercase tracking-wider border border-primary/20 text-[11px] shadow-sm">Relaxamento &amp; Flexibilidade</span>
+</div>
+<div class="p-4 sm:p-6 flex flex-col flex-1 justify-between gap-4">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between gap-2">
+<h3 class="font-headline-sm text-[20px] leading-tight text-on-surface font-semibold group-hover:text-primary transition-colors cursor-pointer" onclick="openServiceModal('tay-massagem')">Tay Massagem</h3>
+<span class="text-xs font-medium text-[#8c786a] bg-[#f4eee7] px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap">75 min</span>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed">Alongamentos suaves assistidos e pressões precisas nas linhas energéticas para flexibilidade, amplitude de movimento e harmonia.</p>
+</div>
+<div class="card-actions pt-4 flex items-center justify-between border-t border-primary/10 gap-2">
+<button type="button" onclick="openServiceModal('tay-massagem')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#f3ded6] hover:bg-[#ebdccf] text-[#352d27] border border-[#d4a373]/30 flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-primary">visibility</span> Ver Detalhes
+</button>
+<button type="button" onclick="openBookingModal('Tay Massagem')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#352d27] hover:bg-primary text-white flex items-center gap-1.5 transition-all duration-300 active:scale-95 shadow-sm hover:shadow cursor-pointer"><span class="material-symbols-outlined text-[16px]">calendar_month</span> Agendar</button>
+</div>
+</div>
+</div>
+
+<!-- CARD 3: Quick Massage na Cadeira -->
+<div class="service-card reveal-item is-visible flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:border-primary/50 transition-all duration-300 group border border-[#ebe3da]" data-cat="relax" data-service="quick-massage" style="display: flex; transform: translateY(0px) scale(1);" data-stitch-orig-opacity="1">
+<div class="relative aspect-[16/10] overflow-hidden bg-surface-container-high cursor-pointer" onclick="openServiceModal('quick-massage')">
+<img loading="lazy" decoding="async" alt="Quick Massage na Cadeira Ergonômica" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="imagens/Quick Massage.webp">
+<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-surface-bright/95 backdrop-blur text-primary font-label-sm font-bold uppercase tracking-wider border border-primary/20 text-[11px] shadow-sm">Express • 30 min</span>
+</div>
+<div class="p-4 sm:p-6 flex flex-col flex-1 justify-between gap-4">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between gap-2">
+<h3 class="font-headline-sm text-[20px] leading-tight text-on-surface font-semibold group-hover:text-primary transition-colors cursor-pointer" onclick="openServiceModal('quick-massage')">Quick Massage</h3>
+<span class="text-xs font-medium text-[#8c786a] bg-[#f4eee7] px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap">30 min</span>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed">Alívio rápido e concentrado para tensões cervicais, trapézio e costas em cadeira ergonômica profissional. Ideal para pausas ativas.</p>
+</div>
+<div class="card-actions pt-4 flex items-center justify-between border-t border-primary/10 gap-2">
+<button type="button" onclick="openServiceModal('quick-massage')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#f3ded6] hover:bg-[#ebdccf] text-[#352d27] border border-[#d4a373]/30 flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-primary">visibility</span> Ver Detalhes
+</button>
+<button type="button" onclick="openBookingModal('Quick Massage')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#352d27] hover:bg-primary text-white flex items-center gap-1.5 transition-all duration-300 active:scale-95 shadow-sm hover:shadow cursor-pointer"><span class="material-symbols-outlined text-[16px]">calendar_month</span> Agendar</button>
+</div>
+</div>
+</div>
+
+<!-- CARD 4: Escalda-Pés Ritual -->
+<div class="service-card reveal-item is-visible flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:border-primary/50 transition-all duration-300 group border border-[#ebe3da]" data-cat="relax" data-service="escalda-pes-ritual" style="display: flex; transform: translateY(0px) scale(1);" data-stitch-orig-opacity="1">
+<div class="relative aspect-[16/10] overflow-hidden bg-surface-container-high cursor-pointer" onclick="openServiceModal('escalda-pes-ritual')">
+<img loading="lazy" decoding="async" alt="Escalda-Pés Ritual Terapêutico" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="imagens/Escalda-Pés Ritual.webp">
+<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-surface-bright/95 backdrop-blur text-primary font-label-sm font-bold uppercase tracking-wider border border-primary/20 text-[11px] shadow-sm">Ritual Sensorial</span>
+</div>
+<div class="p-4 sm:p-6 flex flex-col flex-1 justify-between gap-4">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between gap-2">
+<h3 class="font-headline-sm text-[20px] leading-tight text-on-surface font-semibold group-hover:text-primary transition-colors cursor-pointer" onclick="openServiceModal('escalda-pes-ritual')">Escalda-Pés Ritual</h3>
+<span class="text-xs font-medium text-[#8c786a] bg-[#f4eee7] px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap">45 min</span>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed">Banho de imersão aromático morno com ervas medicinais, pétalas, sais minerais e massagem reflexológica relaxante com óleos essenciais.</p>
+</div>
+<div class="card-actions pt-4 flex items-center justify-between border-t border-primary/10 gap-2">
+<button type="button" onclick="openServiceModal('escalda-pes-ritual')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#f3ded6] hover:bg-[#ebdccf] text-[#352d27] border border-[#d4a373]/30 flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-primary">visibility</span> Ver Detalhes
+</button>
+<button type="button" onclick="openBookingModal('Escalda-Pés Ritual')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#352d27] hover:bg-primary text-white flex items-center gap-1.5 transition-all duration-300 active:scale-95 shadow-sm hover:shadow cursor-pointer"><span class="material-symbols-outlined text-[16px]">calendar_month</span> Agendar</button>
+</div>
+</div>
+</div>
+
+<!-- CARD 5: Massagem Terapêutica -->
+<div class="service-card reveal-item is-visible flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:border-primary/50 transition-all duration-300 group border border-[#ebe3da]" data-cat="terapia" data-service="massagem-terapeutica" style="transform: translateY(0px) scale(1); display: flex;" data-stitch-orig-opacity="1">
+<div class="relative aspect-[16/10] overflow-hidden bg-surface-container-high cursor-pointer" onclick="openServiceModal('massagem-terapeutica')">
+<img loading="lazy" decoding="async" alt="Massagem Terapêutica Clínica" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="imagens/Massagem Terapêutica.webp">
+<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-surface-bright/95 backdrop-blur text-primary font-label-sm font-bold uppercase tracking-wider border border-primary/20 text-[11px] shadow-sm">Terapia Clínica</span>
+</div>
+<div class="p-4 sm:p-6 flex flex-col flex-1 justify-between gap-4">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between gap-2">
+<h3 class="font-headline-sm text-[20px] leading-tight text-on-surface font-semibold group-hover:text-primary transition-colors cursor-pointer" onclick="openServiceModal('massagem-terapeutica')">Massagem Terapêutica</h3>
+<span class="text-xs font-medium text-[#8c786a] bg-[#f4eee7] px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap">60 min</span>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed">Pressão profunda direcionada para nós musculares, contraturas e dores posturais crônicas acumuladas na rotina.</p>
+</div>
+<div class="card-actions pt-4 flex items-center justify-between border-t border-primary/10 gap-2">
+<button type="button" onclick="openServiceModal('massagem-terapeutica')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#f3ded6] hover:bg-[#ebdccf] text-[#352d27] border border-[#d4a373]/30 flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-primary">visibility</span> Ver Detalhes
+</button>
+<button type="button" onclick="openBookingModal('Massagem Terapêutica')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#352d27] hover:bg-primary text-white flex items-center gap-1.5 transition-all duration-300 active:scale-95 shadow-sm hover:shadow cursor-pointer"><span class="material-symbols-outlined text-[16px]">calendar_month</span> Agendar</button>
+</div>
+</div>
+</div>
+
+<!-- CARD 6: Ventosaterapia -->
+<div class="service-card reveal-item is-visible flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:border-primary/50 transition-all duration-300 group border border-[#ebe3da]" data-cat="terapia" data-service="ventosaterapia" style="transform: translateY(0px) scale(1); display: flex;" data-stitch-orig-opacity="1">
+<div class="relative aspect-[16/10] overflow-hidden bg-surface-container-high cursor-pointer" onclick="openServiceModal('ventosaterapia')">
+<img loading="lazy" decoding="async" alt="Ventosaterapia Tradicional" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="imagens/Ventosaterapia.webp">
+<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-surface-bright/95 backdrop-blur text-primary font-label-sm font-bold uppercase tracking-wider border border-primary/20 text-[11px] shadow-sm">Desintoxicação</span>
+</div>
+<div class="p-4 sm:p-6 flex flex-col flex-1 justify-between gap-4">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between gap-2">
+<h3 class="font-headline-sm text-[20px] leading-tight text-on-surface font-semibold group-hover:text-primary transition-colors cursor-pointer" onclick="openServiceModal('ventosaterapia')">Ventosaterapia</h3>
+<span class="text-xs font-medium text-[#8c786a] bg-[#f4eee7] px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap">45 min</span>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed">Aplicação de ventosas para oxigenação tecidual profunda, desintoxicação e liberação de aderências fasciais acumuladas.</p>
+</div>
+<div class="card-actions pt-4 flex items-center justify-between border-t border-primary/10 gap-2">
+<button type="button" onclick="openServiceModal('ventosaterapia')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#f3ded6] hover:bg-[#ebdccf] text-[#352d27] border border-[#d4a373]/30 flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-primary">visibility</span> Ver Detalhes
+</button>
+<button type="button" onclick="openBookingModal('Ventosaterapia')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#352d27] hover:bg-primary text-white flex items-center gap-1.5 transition-all duration-300 active:scale-95 shadow-sm hover:shadow cursor-pointer"><span class="material-symbols-outlined text-[16px]">calendar_month</span> Agendar</button>
+</div>
+</div>
+</div>
+
+<!-- CARD 7: Alinhamento de Coluna -->
+<div class="service-card reveal-item is-visible flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:border-primary/50 transition-all duration-300 group border border-[#ebe3da]" data-cat="terapia" data-service="alinhamento-coluna" style="transform: translateY(0px) scale(1); display: flex;" data-stitch-orig-opacity="1">
+<div class="relative aspect-[16/10] overflow-hidden bg-surface-container-high cursor-pointer" onclick="openServiceModal('alinhamento-coluna')">
+<img loading="lazy" decoding="async" alt="Alinhamento de Coluna Biomecânico" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="imagens/Alinhamento de Coluna.webp">
+<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-surface-bright/95 backdrop-blur text-primary font-label-sm font-bold uppercase tracking-wider border border-primary/20 text-[11px] shadow-sm">Biomecânica</span>
+</div>
+<div class="p-4 sm:p-6 flex flex-col flex-1 justify-between gap-4">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between gap-2">
+<h3 class="font-headline-sm text-[20px] leading-tight text-on-surface font-semibold group-hover:text-primary transition-colors cursor-pointer" onclick="openServiceModal('alinhamento-coluna')">Alinhamento de Coluna</h3>
+<span class="text-xs font-medium text-[#8c786a] bg-[#f4eee7] px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap">50 min</span>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed">Descompressão suave e ajustes biomecânicos precisos para alívio articular, liberdade torácica e postura harmônica.</p>
+</div>
+<div class="card-actions pt-4 flex items-center justify-between border-t border-primary/10 gap-2">
+<button type="button" onclick="openServiceModal('alinhamento-coluna')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#f3ded6] hover:bg-[#ebdccf] text-[#352d27] border border-[#d4a373]/30 flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-primary">visibility</span> Ver Detalhes
+</button>
+<button type="button" onclick="openBookingModal('Alinhamento de Coluna')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#352d27] hover:bg-primary text-white flex items-center gap-1.5 transition-all duration-300 active:scale-95 shadow-sm hover:shadow cursor-pointer"><span class="material-symbols-outlined text-[16px]">calendar_month</span> Agendar</button>
+</div>
+</div>
+</div>
+
+<!-- CARD 8: Liberação Miofascial -->
+<div class="service-card reveal-item is-visible flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:border-primary/50 transition-all duration-300 group border border-[#ebe3da]" data-cat="terapia" data-service="liberacao-miofascial" style="transform: translateY(0px) scale(1); display: flex;" data-stitch-orig-opacity="1">
+<div class="relative aspect-[16/10] overflow-hidden bg-surface-container-high cursor-pointer" onclick="openServiceModal('liberacao-miofascial')">
+<img loading="lazy" decoding="async" alt="Liberação Miofascial Profunda" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="imagens/Liberação Miofascial.webp">
+<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-surface-bright/95 backdrop-blur text-primary font-label-sm font-bold uppercase tracking-wider border border-primary/20 text-[11px] shadow-sm">Alta Precisão</span>
+</div>
+<div class="p-4 sm:p-6 flex flex-col flex-1 justify-between gap-4">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between gap-2">
+<h3 class="font-headline-sm text-[20px] leading-tight text-on-surface font-semibold group-hover:text-primary transition-colors cursor-pointer" onclick="openServiceModal('liberacao-miofascial')">Liberação Miofascial</h3>
+<span class="text-xs font-medium text-[#8c786a] bg-[#f4eee7] px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap">60 min</span>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed">Técnica manual terapêutica profunda para restaurar a mobilidade da fáscia, flexibilidade e eliminar pontos de gatilho severos.</p>
+</div>
+<div class="card-actions pt-4 flex items-center justify-between border-t border-primary/10 gap-2">
+<button type="button" onclick="openServiceModal('liberacao-miofascial')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#f3ded6] hover:bg-[#ebdccf] text-[#352d27] border border-[#d4a373]/30 flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-primary">visibility</span> Ver Detalhes
+</button>
+<button type="button" onclick="openBookingModal('Liberação Miofascial')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#352d27] hover:bg-primary text-white flex items-center gap-1.5 transition-all duration-300 active:scale-95 shadow-sm hover:shadow cursor-pointer"><span class="material-symbols-outlined text-[16px]">calendar_month</span> Agendar</button>
+</div>
+</div>
+</div>
+
+<!-- CARD 9: Acupuntura sem Agulhas -->
+<div class="service-card reveal-item is-visible flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:border-primary/50 transition-all duration-300 group border border-[#ebe3da]" data-cat="terapia" data-service="acupuntura-sem-agulhas" style="transform: translateY(0px) scale(1); display: flex;" data-stitch-orig-opacity="1">
+<div class="relative aspect-[16/10] overflow-hidden bg-surface-container-high cursor-pointer" onclick="openServiceModal('acupuntura-sem-agulhas')">
+<img loading="lazy" decoding="async" alt="Acupuntura sem Agulhas e Auriculoterapia" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="imagens/Acupuntura sem Agulhas.webp">
+<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-surface-bright/95 backdrop-blur text-primary font-label-sm font-bold uppercase tracking-wider border border-primary/20 text-[11px] shadow-sm">Energética • Suave</span>
+</div>
+<div class="p-4 sm:p-6 flex flex-col flex-1 justify-between gap-4">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between gap-2">
+<h3 class="font-headline-sm text-[20px] leading-tight text-on-surface font-semibold group-hover:text-primary transition-colors cursor-pointer" onclick="openServiceModal('acupuntura-sem-agulhas')">Acupuntura sem Agulhas</h3>
+<span class="text-xs font-medium text-[#8c786a] bg-[#f4eee7] px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap">45 min</span>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed">Estimulação suave de pontos meridianos e auriculoterapia com sementes e pressão dourada para acalmar a mente e reduzir dores.</p>
+</div>
+<div class="card-actions pt-4 flex items-center justify-between border-t border-primary/10 gap-2">
+<button type="button" onclick="openServiceModal('acupuntura-sem-agulhas')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#f3ded6] hover:bg-[#ebdccf] text-[#352d27] border border-[#d4a373]/30 flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-primary">visibility</span> Ver Detalhes
+</button>
+<button type="button" onclick="openBookingModal('Acupuntura sem Agulhas')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#352d27] hover:bg-primary text-white flex items-center gap-1.5 transition-all duration-300 active:scale-95 shadow-sm hover:shadow cursor-pointer"><span class="material-symbols-outlined text-[16px]">calendar_month</span> Agendar</button>
+</div>
+</div>
+</div>
+
+<!-- CARD 10: Drenagem Linfática -->
+<div class="service-card reveal-item is-visible flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:border-primary/50 transition-all duration-300 group border border-[#ebe3da]" data-cat="drenagem" data-service="drenagem-linfatica" style="transform: translateY(0px) scale(1); display: flex;" data-stitch-orig-opacity="1">
+<div class="relative aspect-[16/10] overflow-hidden bg-surface-container-high cursor-pointer" onclick="openServiceModal('drenagem-linfatica')">
+<img loading="lazy" decoding="async" alt="Drenagem Linfática Manual" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="imagens/Drenagem Linfática.webp">
+<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-surface-bright/95 backdrop-blur text-primary font-label-sm font-bold uppercase tracking-wider border border-primary/20 text-[11px] shadow-sm">Desinchaço • Fluidez</span>
+</div>
+<div class="p-4 sm:p-6 flex flex-col flex-1 justify-between gap-4">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between gap-2">
+<h3 class="font-headline-sm text-[20px] leading-tight text-on-surface font-semibold group-hover:text-primary transition-colors cursor-pointer" onclick="openServiceModal('drenagem-linfatica')">Drenagem Linfática</h3>
+<span class="text-xs font-medium text-[#8c786a] bg-[#f4eee7] px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap">60 min</span>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed">Estímulo suave e rítmico do sistema linfático para redução imediata de edemas, retenção hídrica e sensação revitalizadora de leveza.</p>
+</div>
+<div class="card-actions pt-4 flex items-center justify-between border-t border-primary/10 gap-2">
+<button type="button" onclick="openServiceModal('drenagem-linfatica')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#f3ded6] hover:bg-[#ebdccf] text-[#352d27] border border-[#d4a373]/30 flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-primary">visibility</span> Ver Detalhes
+</button>
+<button type="button" onclick="openBookingModal('Drenagem Linfática')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#352d27] hover:bg-primary text-white flex items-center gap-1.5 transition-all duration-300 active:scale-95 shadow-sm hover:shadow cursor-pointer"><span class="material-symbols-outlined text-[16px]">calendar_month</span> Agendar</button>
+</div>
+</div>
+</div>
+
+<!-- CARD 11: Reflexologia Podal -->
+<div class="service-card reveal-item is-visible flex flex-col bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:border-primary/50 transition-all duration-300 group border border-[#ebe3da]" data-cat="drenagem" data-service="reflexologia-podal" style="transform: translateY(0px) scale(1); display: flex;" data-stitch-orig-opacity="1">
+<div class="relative aspect-[16/10] overflow-hidden bg-surface-container-high cursor-pointer" onclick="openServiceModal('reflexologia-podal')">
+<img loading="lazy" decoding="async" alt="Reflexologia Podal Terapêutica" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="imagens/Reflexologia Podal.webp">
+<span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-surface-bright/95 backdrop-blur text-primary font-label-sm font-bold uppercase tracking-wider border border-primary/20 text-[11px] shadow-sm">Equilíbrio Sistêmico</span>
+</div>
+<div class="p-4 sm:p-6 flex flex-col flex-1 justify-between gap-4">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between gap-2">
+<h3 class="font-headline-sm text-[20px] leading-tight text-on-surface font-semibold group-hover:text-primary transition-colors cursor-pointer" onclick="openServiceModal('reflexologia-podal')">Reflexologia Podal</h3>
+<span class="text-xs font-medium text-[#8c786a] bg-[#f4eee7] px-2.5 py-1 rounded-full shrink-0 whitespace-nowrap">45 min</span>
+</div>
+<p class="font-body-md text-body-md text-secondary leading-relaxed">Estímulo preciso de zonas reflexas nos pés conectadas diretamente aos sistemas vitais do corpo, restabelecendo a homeostase.</p>
+</div>
+<div class="card-actions pt-4 flex items-center justify-between border-t border-primary/10 gap-2">
+<button type="button" onclick="openServiceModal('reflexologia-podal')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#f3ded6] hover:bg-[#ebdccf] text-[#352d27] border border-[#d4a373]/30 flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-primary">visibility</span> Ver Detalhes
+</button>
+<button type="button" onclick="openBookingModal('Reflexologia Podal')" class="px-4 py-2.5 rounded-full text-xs font-semibold bg-[#352d27] hover:bg-primary text-white flex items-center gap-1.5 transition-all duration-300 active:scale-95 shadow-sm hover:shadow cursor-pointer"><span class="material-symbols-outlined text-[16px]">calendar_month</span> Agendar</button>
+</div>
+</div>
+</div></div>
+</div>
+</section>
+<!-- TESTIMONIAL EDITORIAL RIBBON -->
+<!-- DEPOIMENTOS: MODELOS DEMONSTRATIVOS PARA SUBSTITUIR POR AVALIAÇÕES REAIS -->
+<section class="w-full py-space-lg sm:py-space-xl bg-background overflow-hidden relative" id="depoimentos">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col gap-8 sm:gap-10">
+    <div class="max-w-2xl mx-auto text-center flex flex-col items-center gap-3 reveal-item is-visible">
+      <span class="material-symbols-outlined text-[42px] text-primary/75">format_quote</span>
+      <span class="font-label-md uppercase tracking-widest font-semibold text-primary">Cuidado que acolhe</span>
+      <h2 class="font-headline-lg text-headline-lg text-on-surface font-semibold">Experiências de Bem-Estar</h2>
+      <p class="font-body-md text-secondary">Espaço reservado para compartilhar as experiências de quem recebe nossos cuidados.</p>
+      <span class="inline-flex items-center gap-2 rounded-full border border-[#d4a373]/40 bg-[#f8f0e8] px-3 py-1.5 text-[11px] font-semibold text-[#795b45]">
+        <span class="material-symbols-outlined text-[15px]">info</span>
+        Textos demonstrativos — substituir por depoimentos reais antes da publicação
+      </span>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-5">
+      <article class="rounded-2xl sm:rounded-3xl bg-surface-container-lowest border border-[#ebe3da] p-5 sm:p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col gap-4 reveal-item is-visible">
+        <div class="flex items-center justify-between"><span class="material-symbols-outlined text-[28px] text-primary/60">format_quote</span><span class="text-[10px] uppercase tracking-wider font-bold text-[#98765b] bg-[#f7eee6] rounded-full px-2.5 py-1">Exemplo 01</span></div>
+        <p class="text-[14px] leading-relaxed text-on-surface-variant flex-1">“Um momento de pausa na rotina, com atenção aos detalhes e um ambiente preparado para relaxar.”</p>
+        <div class="pt-3 border-t border-primary/10"><p class="text-[13px] font-semibold text-on-surface">Cliente demonstrativa 01</p><p class="text-[11px] text-secondary mt-1">Texto ilustrativo</p></div>
+      </article>
+      <article class="rounded-2xl sm:rounded-3xl bg-surface-container-lowest border border-[#ebe3da] p-5 sm:p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col gap-4 reveal-item is-visible">
+        <div class="flex items-center justify-between"><span class="material-symbols-outlined text-[28px] text-primary/60">format_quote</span><span class="text-[10px] uppercase tracking-wider font-bold text-[#98765b] bg-[#f7eee6] rounded-full px-2.5 py-1">Exemplo 02</span></div>
+        <p class="text-[14px] leading-relaxed text-on-surface-variant flex-1">“Atendimento acolhedor e cuidadoso. A experiência transmite tranquilidade do início ao fim.”</p>
+        <div class="pt-3 border-t border-primary/10"><p class="text-[13px] font-semibold text-on-surface">Cliente demonstrativa 02</p><p class="text-[11px] text-secondary mt-1">Texto ilustrativo</p></div>
+      </article>
+      <article class="rounded-2xl sm:rounded-3xl bg-surface-container-lowest border border-[#ebe3da] p-5 sm:p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col gap-4 reveal-item is-visible">
+        <div class="flex items-center justify-between"><span class="material-symbols-outlined text-[28px] text-primary/60">format_quote</span><span class="text-[10px] uppercase tracking-wider font-bold text-[#98765b] bg-[#f7eee6] rounded-full px-2.5 py-1">Exemplo 03</span></div>
+        <p class="text-[14px] leading-relaxed text-on-surface-variant flex-1">“Um cuidado especial, com escuta atenta e respeito às necessidades de cada pessoa.”</p>
+        <div class="pt-3 border-t border-primary/10"><p class="text-[13px] font-semibold text-on-surface">Cliente demonstrativa 03</p><p class="text-[11px] text-secondary mt-1">Texto ilustrativo</p></div>
+      </article>
+      <article class="rounded-2xl sm:rounded-3xl bg-surface-container-lowest border border-[#ebe3da] p-5 sm:p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col gap-4 reveal-item is-visible">
+        <div class="flex items-center justify-between"><span class="material-symbols-outlined text-[28px] text-primary/60">format_quote</span><span class="text-[10px] uppercase tracking-wider font-bold text-[#98765b] bg-[#f7eee6] rounded-full px-2.5 py-1">Exemplo 04</span></div>
+        <p class="text-[14px] leading-relaxed text-on-surface-variant flex-1">“O ambiente é agradável e a sessão oferece um tempo dedicado ao bem-estar e ao descanso.”</p>
+        <div class="pt-3 border-t border-primary/10"><p class="text-[13px] font-semibold text-on-surface">Cliente demonstrativa 04</p><p class="text-[11px] text-secondary mt-1">Texto ilustrativo</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+<!-- INTERACTIVE BOOKING, FAQ & LOCATION SECTION -->
+<section class="w-full py-space-lg sm:py-space-xl bg-surface-container border-t border-primary/10" id="contato">
+<div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col gap-space-lg sm:gap-space-xl">
+<!-- Top Grid: Interactive Booking Card + Location Card -->
+<div class="w-full bg-[#fdfaf7] rounded-3xl lg:rounded-[36px] border border-primary/20 shadow-2xl overflow-hidden reveal-item is-visible"><div class="grid grid-cols-1 lg:grid-cols-12"><div class="lg:col-span-5 bg-[#352518] text-white p-6 sm:p-8 lg:p-12 flex flex-col justify-between relative overflow-hidden"><div class="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-primary/10 blur-3xl pointer-events-none"></div><div class="flex flex-col gap-6 z-10"><div class="inline-flex items-center gap-2"><span class="text-[11px] font-bold uppercase tracking-widest text-[#d4a373]">RESERVA EXCLUSIVA</span></div><h3 class="font-headline-md text-headline-md lg:text-[34px] lg:leading-[42px] font-semibold text-[#fdfbf9] tracking-tight">Permita-se Sentir a Leveza de um Corpo Sem Dores.</h3><p class="text-[#daccc1] text-body-md text-[14px] leading-relaxed">Preencha os campos ao lado para solicitar seu horário ou fale diretamente com a terapeuta Vladia Brito para receber acolhimento e orientação personalizada sobre qual terapia melhor atende ao seu momento.</p><div class="flex flex-col gap-3.5 pt-2"><a class="flex items-center gap-3.5 p-3.5 rounded-2xl bg-[#453222] border border-[#5d4231] hover:bg-[#503b29] transition-all duration-300 group" href="https://wa.me/5585992090392" rel="noopener noreferrer" target="_blank"><div class="w-10 h-10 rounded-xl bg-[#291b10] flex items-center justify-center text-[#d4a373] shrink-0 group-hover:scale-105 transition-transform"><span class="material-symbols-outlined text-[20px]">chat</span></div><div class="flex flex-col"><span class="text-[14px] font-semibold text-white leading-tight">WhatsApp Direto</span><span class="text-[12px] text-[#dcbeaf]">(85) 99209-0392</span></div></a><div class="flex items-center gap-3.5 p-3.5 rounded-2xl bg-[#453222] border border-[#5d4231]"><div class="w-10 h-10 rounded-xl bg-[#291b10] flex items-center justify-center text-[#d4a373] shrink-0"><span class="material-symbols-outlined text-[20px]">location_on</span></div><div class="flex flex-col"><span class="text-[14px] font-semibold text-white leading-tight">Espaço VB Massoterapia</span><span class="text-[12px] text-[#dcbeaf]">Atendimento Climatizado • Fortaleza — CE</span></div></div></div></div><div class="pt-8 mt-6 border-t border-[#533f34] text-[12px] text-[#b2a190] leading-relaxed z-10"><p class="">Atendimento individual com hora marcada para assegurar total tranquilidade, silêncio e biossegurança.</p></div></div><div class="lg:col-span-7 bg-[#fcf9f6] p-6 sm:p-8 lg:p-12 flex flex-col justify-between"><form class="flex flex-col gap-5" id="custom-booking-form" onsubmit="handleBookingSubmit(event)"><div class="flex flex-col items-center justify-center pb-2 mb-1"><img loading="lazy" decoding="async" src="imagens/logomarca (1).webp" alt="VB Massoterapia" class="h-20 sm:h-24 w-auto object-contain select-none pointer-events-none drop-shadow-md transition-transform duration-300 hover:scale-105" style="mix-blend-mode: multiply; background: transparent;"></div><div class="flex flex-col gap-1.5"><label class="text-[13px] font-semibold text-[#231d19]" for="booking-name">Seu Nome Completo</label><input class="w-full px-4 py-3 rounded-xl bg-[#f0edea] border-0 text-[#231d19] text-[14px] placeholder-[#8d786c] focus:outline-none focus:ring-2 focus:ring-[#7a573b] transition-all" id="booking-name" placeholder="Como prefere ser chamado(a)?" required="" type="text" autocomplete="name"></div><div class="flex flex-col gap-1.5"><label class="text-[13px] font-semibold text-[#231d19]" for="booking-service">Procedimento ou Ritual</label><select class="w-full px-4 py-3 rounded-xl bg-[#f0edea] border-0 text-[#231d19] text-[14px] focus:outline-none focus:ring-2 focus:ring-[#7a573b] transition-all cursor-pointer" id="booking-service"><option value="Massagem Relaxante">Massagem Relaxante (60 ou 90 min)</option><option value="Tay Massagem">Tay Massagem (75 min)</option><option value="Quick Massage">Quick Massage (30 min)</option><option value="Escalda-Pés Ritual">Escalda-Pés Ritual (45 min)</option><option value="Massagem Terapêutica">Massagem Terapêutica (60 min)</option><option value="Ventosaterapia">Ventosaterapia (45 min)</option><option value="Alinhamento de Coluna">Alinhamento de Coluna (50 min)</option><option value="Liberação Miofascial">Liberação Miofascial (60 min)</option><option value="Acupuntura sem Agulhas">Acupuntura sem Agulhas (45 min)</option><option value="Drenagem Linfática">Drenagem Linfática (60 min)</option><option value="Reflexologia Podal">Reflexologia Podal (45 min)</option></select></div><div class="flex flex-col gap-1.5"><label class="text-[13px] font-semibold text-[#231d19]" for="booking-notes">Observações ou Região de Tensão (Opcional)</label><textarea class="w-full px-4 py-3 rounded-xl bg-[#f0edea] border-0 text-[#231d19] text-[14px] placeholder-[#8d786c] focus:outline-none focus:ring-2 focus:ring-[#7a573b] transition-all resize-none" id="booking-notes" placeholder="Ex: dor lombar, tensão no pescoço, retenção líquida..." rows="3"></textarea></div><div class="flex flex-col gap-3 pt-2"><button class="w-full py-4 rounded-full bg-[#352518] hover:bg-[#4f3622] text-white font-label-md font-bold uppercase tracking-wider text-[13px] flex items-center justify-center gap-2.5 shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-95 cursor-pointer" type="submit"><span class="material-symbols-outlined text-[20px]">calendar_month</span><span class="">SOLICITAR RESERVA DE HORÁRIO</span></button><p class="text-center text-[11px] text-[#8d786c] leading-relaxed px-2">Nenhum valor é cobrado antecipadamente. Entraremos em contato via WhatsApp para confirmar seu horário ideal.</p></div></form></div></div></div>
+<!-- FAQ Accordion Block -->
+<div class="max-w-4xl mx-auto w-full flex flex-col gap-4 reveal-item is-visible">
+<div class="text-center mb-4">
+<span class="font-label-md uppercase tracking-widest text-primary font-semibold">Esclarecimentos</span>
+<h3 class="font-headline-md text-headline-md text-on-surface font-semibold">Dúvidas Frequentes</h3>
+</div>
+<!-- FAQ Item 1 -->
+<details class="group bg-surface-container-lowest rounded-2xl p-5 sm:p-6 shadow-sm transition-all duration-300 open:shadow-md cursor-pointer border border-primary/10 hover:border-primary/30">
+<summary class="font-label-lg text-label-lg font-semibold text-on-surface flex items-center justify-between list-none">
+<span class="">Qual a duração recomendada para a primeira sessão?</span>
+<span class="material-symbols-outlined text-primary transition-transform duration-300 group-open:rotate-180">expand_more</span>
+</summary>
+<p class="font-body-md text-secondary mt-4 leading-relaxed transition-opacity duration-300">
+            Para o primeiro atendimento, recomendamos 60 a 90 minutos. Esse tempo permite uma conversa inicial de acolhimento para identificar queixas e pontos de tensão, seguida da sessão completa sem pressa.
+          </p>
+</details>
+<!-- FAQ Item 2 -->
+<details class="group bg-surface-container-lowest rounded-2xl p-5 sm:p-6 shadow-sm transition-all duration-300 open:shadow-md cursor-pointer border border-primary/10 hover:border-primary/30">
+<summary class="font-label-lg text-label-lg font-semibold text-on-surface flex items-center justify-between list-none">
+<span class="">Como funciona a combinação de técnicas corporais?</span>
+<span class="material-symbols-outlined text-primary transition-transform duration-300 group-open:rotate-180">expand_more</span>
+</summary>
+<p class="font-body-md text-secondary mt-4 leading-relaxed transition-opacity duration-300">
+            Vladia Brito possui 17 anos de experiência e integra técnicas de acordo com a necessidade detectada na palpação — podendo mesclar liberação miofascial, ventosas e toques relaxantes na mesma sessão.
+          </p>
+</details>
+<!-- FAQ Item 3 -->
+<details class="group bg-surface-container-lowest rounded-2xl p-5 sm:p-6 shadow-sm transition-all duration-300 open:shadow-md cursor-pointer border border-primary/10 hover:border-primary/30">
+<summary class="font-label-lg text-label-lg font-semibold text-on-surface flex items-center justify-between list-none">
+<span class="">O que vestir e como me preparar para a sessão?</span>
+<span class="material-symbols-outlined text-primary transition-transform duration-300 group-open:rotate-180">expand_more</span>
+</summary>
+<p class="font-body-md text-secondary mt-4 leading-relaxed transition-opacity duration-300">
+            Recomendamos roupas confortáveis e uma refeição leve antes do atendimento. O espaço conta com toalhas macias, lençóis limpos e descartáveis quando necessário para máxima higiene e privacidade.
+          </p>
+</details>
+</div>
+</div>
+</section>
+</div><script class="">
+window.handleBookingSubmit = function(event) {
+  if (event) event.preventDefault();
+  const name = document.getElementById('booking-name')?.value?.trim() || '';
+  const service = document.getElementById('booking-service')?.value || '';
+  const time1 = document.getElementById('booking-time1')?.value?.trim() || '';
+  const time2 = document.getElementById('booking-time2')?.value?.trim() || 'A combinar';
+  const notes = document.getElementById('booking-notes')?.value?.trim() || 'Nenhuma';
+  
+  if (!name) {
+    alert('Por favor, informe seu nome.');
+    return;
+  }
+  
+  let msg = `Olá Vladia! Gostaria de solicitar uma reserva de horário na VB Massoterapia.\n\n`;
+  msg += `*Nome:* ${name}\n`;
+  msg += `*Procedimento:* ${service}\n`;
+  msg += `*1ª Opção de Horário:* ${time1}\n`;
+  msg += `*2ª Opção de Horário:* ${time2}\n`;
+  msg += `*Observações:* ${notes}`;
+  
+  const url = `https://wa.me/5585992090392?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+};
+</script></main><footer class="w-full bg-[#f4ece3] text-on-surface py-space-lg sm:py-space-xl mt-auto border-t border-primary/20"><div class="max-w-7xl mx-auto px-6 lg:px-12"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 mb-space-lg items-start"><div class="lg:col-span-4 flex flex-col gap-4"><div class="flex items-center gap-3.5"><div class="w-12 h-12 flex items-center justify-center"><img loading="lazy" decoding="async" alt="VB Massoterapia" class="h-12 w-auto object-contain animate-gentle-float" src="imagens/logomarca (1).webp" style="mix-blend-mode: multiply; background: transparent;"></div><div class="flex flex-col"><span class="font-headline-sm text-[20px] font-semibold tracking-tight text-on-surface leading-tight">VB MASSOTERAPIA</span><span class="font-label-sm text-[11px] uppercase text-primary font-bold tracking-widest">Studio de Estética &amp; Bem-Estar</span></div></div><p class="font-body-md text-[14px] text-secondary leading-relaxed max-w-[360px]">Santuário de autocuidado e reconexão corporal, projetado com afeto, biossegurança e maestria terapêutica de 17 anos para restaurar o equilíbrio do seu corpo e mente.</p><div class="flex items-center gap-3 pt-1"><a class="w-9 h-9 rounded-full flex items-center justify-center bg-surface-container hover:bg-secondary-container transition-all hover:scale-110 active:scale-95 text-[#6a5b55] hover:text-primary border border-primary/20 shadow-sm" href="https://instagram.com/vladiabrittomassoterapia" rel="noopener noreferrer" target="_blank" title="Instagram @vladiabrittomassoterapia"><span class="material-symbols-outlined text-[18px]">photo_camera</span></a><a class="w-9 h-9 rounded-full flex items-center justify-center bg-surface-container hover:bg-secondary-container transition-all hover:scale-110 active:scale-95 text-[#6a5b55] hover:text-primary border border-primary/20 shadow-sm" href="#" rel="noopener noreferrer" target="_blank" title="Facebook"><span class="material-symbols-outlined text-[18px]">public</span></a></div></div><div class="lg:col-span-4 flex flex-col gap-4"><span class="font-label-sm text-[12px] uppercase tracking-widest text-[#7a573b] font-bold">ATENDIMENTO &amp; AGENDA</span><div class="flex flex-col gap-3.5"><div class="flex items-start gap-3"><span class="material-symbols-outlined text-[20px] text-primary mt-0.5 shrink-0">schedule</span><div class="flex flex-col"><span class="font-label-md text-[13px] font-bold text-on-surface">Segunda a Sexta-feira</span><span class="text-[13px] text-secondary">08h00 às 19h00 (Com hora marcada)</span></div></div><div class="flex items-start gap-3"><span class="material-symbols-outlined text-[20px] text-primary mt-0.5 shrink-0">schedule</span><div class="flex flex-col"><span class="font-label-md text-[13px] font-bold text-on-surface">Sábado</span><span class="text-[13px] text-secondary">08h30 às 14h00 (Vagas concorridas)</span></div></div><div class="flex items-start gap-3"><span class="material-symbols-outlined text-[20px] text-primary mt-0.5 shrink-0">chat</span><div class="flex flex-col"><span class="font-label-md text-[13px] font-bold text-on-surface">WhatsApp Oficial</span><a class="text-[13px] text-primary font-semibold hover:underline" href="https://wa.me/5585992090392" rel="noopener noreferrer" target="_blank">+55 (85) 99209-0392</a></div></div></div></div><div class="lg:col-span-4 flex flex-col gap-4"><span class="font-label-sm text-[12px] uppercase tracking-widest text-[#7a573b] font-bold">LOCALIZAÇÃO DO STUDIO</span><div class="flex items-start gap-2.5"><span class="material-symbols-outlined text-[20px] text-primary mt-0.5 shrink-0">location_on</span><p class="text-[13px] text-secondary leading-relaxed">Fortaleza - Ceará • Atendimento Climatizado &amp; Exclusivo com Hora Marcada</p></div><a href="https://maps.google.com/?q=Fortaleza+CE" target="_blank" rel="noopener noreferrer" title="Abrir localização no Google Maps" class="relative w-full h-32 rounded-2xl overflow-hidden border border-primary/25 shadow-md group flex items-center justify-center cursor-pointer transition-all duration-300 hover:shadow-xl hover:border-primary/50 hover:scale-[1.02] block"><img loading="lazy" decoding="async" src="imagens/002.webp" alt="Mapa de Localização do Studio - Fortaleza CE" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"><div class="absolute inset-0 bg-[#231d19]/10 group-hover:bg-transparent transition-colors duration-300"></div><div class="relative z-10 w-11 h-11 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm border border-[#d4a373]/40 flex items-center justify-center text-primary shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-white"><span class="material-symbols-outlined text-[24px]" style="font-variation-settings: &quot;FILL&quot; 1;">location_on</span></div></a></div></div><div class="pt-space-md flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left border-t border-primary/15"><p class="font-body-sm text-[12px] text-secondary">© 2026 VB Massoterapia • Vladia Brito (17 Anos de Experiência). Todos os direitos reservados.</p><div class="flex items-center gap-5 font-body-sm text-[12px] text-secondary"><a class="hover:text-primary transition-colors" href="#">Privacidade</a><a class="hover:text-primary transition-colors" href="#">Ética &amp; Cuidado</a><a class="hover:text-primary transition-colors" href="#">Termos de Agendamento</a><span class="hidden md:inline text-primary/60">•</span><span class="text-[11px] text-[#8c786a]">Desenvolvido com carinho para nossa cliente VIP</span></div></div></div></footer><!-- SERVICE DETAIL MODAL (Matching Reference Layout IMAGE_2) -->
+<div id="service-modal-backdrop" class="fixed inset-0 z-50 bg-[#231d19]/60 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto transition-opacity duration-300 opacity-0" onclick="handleBackdropClick(event)">
+  <div id="service-modal-card" class="relative w-full max-w-[580px] bg-white rounded-3xl shadow-2xl overflow-hidden transform transition-all duration-300 scale-95 my-auto">
+    <!-- Close Button (Top-Right Floating) -->
+    <button type="button" onclick="closeServiceModal()" class="absolute top-4 right-4 z-30 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-on-surface shadow-md backdrop-blur-md flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 focus:outline-none" aria-label="Fechar modal">
+      <span class="material-symbols-outlined text-[20px]">close</span>
+    </button>
+
+    <!-- Procedure Hero Image with Overlaid Category Badge & Title -->
+    <div class="relative h-48 sm:h-60 w-full overflow-hidden bg-surface-container-high">
+      <img loading="lazy" decoding="async" id="modal-service-image" alt="" class="w-full h-full object-cover" src="">
+      <!-- Gradient Overlay for Contrast -->
+      <div class="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent"></div>
+      <div class="absolute bottom-4 left-6 right-6 flex flex-col gap-1.5 z-10">
+        <span id="modal-service-category" class="self-start px-3 py-1 rounded-full bg-[#352d27] text-white font-label-sm uppercase tracking-widest text-[10px] font-semibold shadow-sm"></span>
+        <h2 id="modal-service-title" class="font-headline-md text-headline-md lg:text-[28px] text-[#231d19] font-bold leading-tight drop-shadow-sm"></h2>
+      </div>
+    </div>
+
+    <!-- Content Container -->
+    <div class="p-5 sm:p-6 pt-2 flex flex-col gap-5">
+      <!-- Visão Geral -->
+      <div class="flex flex-col gap-1">
+        <span class="font-label-sm uppercase tracking-widest text-primary font-bold text-[11px]">VISÃO GERAL</span>
+        <p id="modal-service-overview" class="font-body-md text-secondary leading-relaxed text-[14px]"></p>
+      </div>
+
+      <!-- Two Rounded Info Cards: Benefícios Comprovados & Como é Conduzida -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+        <!-- Benefícios Comprovados -->
+        <div class="p-4 rounded-2xl bg-[#fdf5ee] border border-[#f3ded6] flex flex-col gap-2.5">
+          <div class="flex items-center gap-1.5 text-[#3d2315]">
+            <span class="material-symbols-outlined text-[18px] text-primary">verified</span>
+            <span class="font-label-md font-bold text-[#3d2315] text-[13px]">Benefícios Comprovados</span>
+          </div>
+          <ul id="modal-service-benefits" class="flex flex-col gap-1.5 text-[12px] text-[#6a5b55] leading-snug list-none pl-0">
+          </ul>
+        </div>
+
+        <!-- Como é Conduzida -->
+        <div class="p-4 rounded-2xl bg-[#fdf5ee] border border-[#f3ded6] flex flex-col gap-2.5">
+          <div class="flex items-center gap-1.5 text-[#3d2315]">
+            <span class="material-symbols-outlined text-[18px] text-primary">tune</span>
+            <span class="font-label-md font-bold text-[#3d2315] text-[13px]">Como é Conduzida</span>
+          </div>
+          <p id="modal-service-conduct" class="font-body-sm text-[12px] text-[#6a5b55] leading-relaxed"></p>
+        </div>
+      </div>
+
+      <!-- Bottom Action Bar: Duração & CTA WhatsApp Sem Preço -->
+      <div class="p-4 rounded-2xl bg-[#faf5f0] border border-[#ebdccf] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
+        <div class="flex flex-col">
+          <span class="font-label-sm uppercase tracking-wider text-[#8d786c] text-[10px] font-bold">DURAÇÃO RECOMENDADA</span>
+          <span id="modal-service-duration" class="font-headline-sm text-headline-sm text-[#231d19] font-bold"></span>
+        </div>
+        <button type="button" id="modal-service-whatsapp" onclick="openBookingFromDetailModal()" class="shimmer-btn justify-center px-6 py-3 rounded-full bg-[#352d27] hover:bg-primary text-white font-label-md font-semibold flex items-center gap-2 shadow-md transition-all duration-300 hover:scale-105 active:scale-95 text-[13px] cursor-pointer"><span class="material-symbols-outlined text-[18px]">calendar_month</span><span class="">Agendar Horário</span></button>
+      </div>
+    </div>
+  </div>
+</div><script class="">
+  const servicesData = {
+    'massagem-relaxante': {
+      title: 'Massagem Relaxante',
+      category: 'Relaxamento Profundo',
+      overview: 'Manobras suaves, deslizamentos rítmicos contínuos e óleos essenciais aquecidos para dissolver o estresse físico e mental em profundidade, acalmando o sistema nervoso autônomo.',
+      benefits: [
+        'Alívio imediato da sobrecarga de estresse e fadiga mental',
+        'Melhora substancial na qualidade do sono e repouso',
+        'Descontração muscular global e liberação de endorfinas'
+      ],
+      conduct: 'Realizada com óleo vegetal aquecido e sinergia de lavanda francesa em ambiente silencioso com temperatura agradável e toalhas aquecidas.',
+      duration: '60 ou 90 min',
+      image: 'imagens/Massagem Relaxante (1).webp'
+    },
+    'tay-massagem': {
+      title: 'Tay Massagem',
+      category: 'Relaxamento & Flexibilidade',
+      overview: 'Alongamentos suaves assistidos e pressões precisas nas linhas de energia vitais (Sen), promovendo ganho de mobilidade e serenidade física.',
+      benefits: [
+        'Aumento significativo da amplitude articular e flexibilidade',
+        'Alívio de rigidez nas costas, quadris e pernas',
+        'Harmonização do fluxo energético corporal'
+      ],
+      conduct: 'Realizada no tatame tradicional com roupas confortáveis e fluidas, conduzida em ritmo meditativo e respeitoso aos limites articulares.',
+      duration: '75 min',
+      image: 'imagens/Tay Massagem.webp'
+    },
+    'quick-massage': {
+      title: 'Quick Massage',
+      category: 'Express • 30 min',
+      overview: 'Sessão rápida e focada nas regiões que mais acumulam estresse postural no dia a dia: trapézio, pescoço, ombros e coluna lombar.',
+      benefits: [
+        'Alívio imediato da cefaleia tensional e rigidez cervical',
+        'Recuperação rápida de disposição durante o dia',
+        'Praticidade: realizada sobre a roupa em cadeira ergonômica'
+      ],
+      conduct: 'Feita em cadeira ergonômica especialmente desenhada, com manobras de shiatsu e acupressão rápida.',
+      duration: '30 min',
+      image: 'imagens/Quick Massage.webp'
+    },
+    'escalda-pes-ritual': {
+      title: 'Escalda-Pés Ritual',
+      category: 'Ritual Sensorial',
+      overview: 'Antiga prática integrativa de imersão térmica com sais minerais, pétalas, ervas medicinais e óleos essenciais, seguida de reflexologia podal.',
+      benefits: [
+        'Descongestiona o fluxo sanguíneo reduzindo cansaço nas pernas',
+        'Efeito tranquilizante imediato para o sistema nervoso',
+        'Hidratação profunda e renovação sensorial'
+      ],
+      conduct: 'Imersão em água aquecida a 38°C com sais e botânicos selecionados, finalizada com massagem reflexológica relaxante.',
+      duration: '45 min',
+      image: 'imagens/Escalda-Pés Ritual.webp'
+    },
+    'massagem-terapeutica': {
+      title: 'Massagem Terapêutica',
+      category: 'Terapia Clínica',
+      overview: 'Pressão firme e precisa direcionada a contraturas musculares profundas, nós miofasciais e sobrecargas posturais crônicas.',
+      benefits: [
+        'Eliminação de contraturas e espasmos musculares',
+        'Aumento da circulação de oxigênio nos tecidos',
+        'Alívio duradouro de dores crônicas acumuladas'
+      ],
+      conduct: 'Aplicação de fricções profundas e alongamentos direcionados com avaliação minuciosa dos pontos mais tensos.',
+      duration: '60 min',
+      image: 'imagens/Massagem Terapêutica.webp'
+    },
+    'ventosaterapia': {
+      title: 'Ventosaterapia',
+      category: 'Desintoxicação & Tecidos',
+      overview: 'Aplicação terapêutica de ventosas de sucção para criar vácuo nos tecidos, estimulando oxigenação e drenagem de toxinas estagnadas.',
+      benefits: [
+        'Soltura expressiva de aderências na fáscia muscular',
+        'Aceleração da recuperação muscular e drenagem local',
+        'Desinflamação e alívio da sensação de peso nas costas'
+      ],
+      conduct: 'Campânulas de acrílico aplicadas com vácuo controlado deslizante e fixo ao longo dos meridianos da coluna.',
+      duration: '45 min',
+      image: 'imagens/Ventosaterapia.webp'
+    },
+    'alinhamento-coluna': {
+      title: 'Alinhamento de Coluna',
+      category: 'Biomecânica Corporal',
+      overview: 'Descompressão suave e ajustes biomecânicos manuais para devolver o equilíbrio articular e postural.',
+      benefits: [
+        'Alívio da compressão discal e descompressão de raízes nervosas',
+        'Melhora imediata da postura e expansão da respiração',
+        'Sensação de coluna alongada e livre de bloqueios'
+      ],
+      conduct: 'Manobras suaves e precisas sem trancos bruscos, respeitando rigorosamente a biomecânica anatômica.',
+      duration: '50 min',
+      image: 'imagens/Alinhamento de Coluna.webp'
+    },
+    'liberacao-miofascial': {
+      title: 'Liberação Miofascial',
+      category: 'Alta Precisão',
+      overview: 'Abordagem especializada com pressão controlada para desativar pontos-gatilho (trigger points) e soltar o tecido conjuntivo.',
+      benefits: [
+        'Restauração completa da mobilidade da fáscia',
+        'Eliminação de dores referidas e queimação muscular',
+        'Otimização do tônus e prevenção de lesões'
+      ],
+      conduct: 'Técnica manual com pressão sustentada e deslizamentos lentos sobre as áreas fibróticas.',
+      duration: '60 min',
+      image: 'imagens/Liberação Miofascial.webp'
+    },
+    'acupuntura-sem-agulhas': {
+      title: 'Acupuntura sem Agulhas',
+      category: 'Energética • Suave',
+      overview: 'Estimulação suave de pontos reflexos e meridianos usando auriculoterapia com sementes e pressão sem agulhas.',
+      benefits: [
+        'Ideal para quem tem sensibilidade ou fobia a agulhas',
+        'Equilíbrio emocional, redução de ansiedade e insônia',
+        'Ação contínua e analgésica nos dias posteriores'
+      ],
+      conduct: 'Mapeamento do pavilhão auricular e aplicação de esferas com fita hipoalergênica.',
+      duration: '45 min',
+      image: 'imagens/Acupuntura sem Agulhas.webp'
+    },
+    'drenagem-linfatica': {
+      title: 'Drenagem Linfática',
+      category: 'Desinchaço • Fluidez',
+      overview: 'Manobras suaves, lentas e rítmicas segundo os cânones de Vodder para drenar o excesso de líquido intersticial.',
+      benefits: [
+        'Redução imediata da retenção de líquidos e inchaço',
+        'Estímulo das defesas imunológicas do organismo',
+        'Sensação instantânea de leveza e bem-estar'
+      ],
+      conduct: 'Toques extremamente suaves e precisos nos gânglios linfáticos sem causar dor nem marcas na pele.',
+      duration: '60 min',
+      image: 'imagens/Drenagem Linfática.webp'
+    },
+    'reflexologia-podal': {
+      title: 'Reflexologia Podal',
+      category: 'Equilíbrio Sistêmico',
+      overview: 'Estímulo de zonas neurorreflexas na planta e dorso dos pés associadas a todos os órgãos e sistemas do corpo.',
+      benefits: [
+        'Homeostase e alívio do estresse corporal global',
+        'Alívio do peso, cansaço e fascite nos pés',
+        'Relaxamento meditativo e restauração energética'
+      ],
+      conduct: 'Inicia com toalhas quentes e óleo aromático, seguida de pressões circulares nos mapas reflexológicos.',
+      duration: '45 min',
+      image: 'imagens/Reflexologia Podal.webp'
+    }
+  };
+
+  function openServiceModal(serviceKey) {
+    const data = servicesData[serviceKey];
+    if (!data) return;
+
+    document.getElementById('modal-service-title').textContent = data.title;
+    document.getElementById('modal-service-category').textContent = data.category;
+    document.getElementById('modal-service-overview').textContent = data.overview;
+    document.getElementById('modal-service-conduct').textContent = data.conduct;
+    document.getElementById('modal-service-duration').textContent = data.duration;
+    document.getElementById('modal-service-image').src = data.image;
+    document.getElementById('modal-service-image').alt = data.title;
+
+    const benefitsList = document.getElementById('modal-service-benefits');
+    benefitsList.innerHTML = '';
+    data.benefits.forEach(b => {
+      const li = document.createElement('li');
+      li.className = 'flex items-start gap-1.5';
+      li.innerHTML = '<span class="material-symbols-outlined text-[14px] text-primary mt-0.5 shrink-0">check_circle</span><span>' + b + '</span>';
+      benefitsList.appendChild(li);
+    });
+
+    const encoded = encodeURIComponent('Olá, Vladia! Gostaria de agendar uma sessão de ' + data.title + ' (' + data.duration + ').');
+    document.getElementById('modal-service-whatsapp').href = 'https://wa.me/5585992090392?text=' + encoded;
+
+    const backdrop = document.getElementById('service-modal-backdrop');
+    const card = document.getElementById('service-modal-card');
+    backdrop.classList.remove('hidden');
+    backdrop.classList.add('flex');
+    setTimeout(() => {
+      backdrop.classList.remove('opacity-0');
+      backdrop.classList.add('opacity-100');
+      card.classList.remove('scale-95');
+      card.classList.add('scale-100');
+    }, 20);
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeServiceModal() {
+    const backdrop = document.getElementById('service-modal-backdrop');
+    const card = document.getElementById('service-modal-card');
+    backdrop.classList.remove('opacity-100');
+    backdrop.classList.add('opacity-0');
+    card.classList.remove('scale-100');
+    card.classList.add('scale-95');
+    setTimeout(() => {
+      backdrop.classList.remove('flex');
+      backdrop.classList.add('hidden');
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  function handleBackdropClick(event) {
+    if (event.target === document.getElementById('service-modal-backdrop')) {
+      closeServiceModal();
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeServiceModal();
+  });
+</script>
+<!-- Interactive Vanilla JavaScript -->
+<script>
+  // 1. Scroll-triggered entrance animations with IntersectionObserver
+  document.addEventListener('DOMContentLoaded', () => {
+    const reveals = document.querySelectorAll('.reveal-item');
+    if ('IntersectionObserver' in window) {
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -40px 0px'
+      });
+      reveals.forEach(el => revealObserver.observe(el));
+    } else {
+      reveals.forEach(el => el.classList.add('is-visible'));
+    }
+
+    // 2. Animated Stats Number Counters
+    const counters = document.querySelectorAll('.counter-stat');
+    let countersDone = false;
+    if ('IntersectionObserver' in window && counters.length > 0) {
+      const statsObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !countersDone) {
+            countersDone = true;
+            counters.forEach(counter => {
+              const target = parseFloat(counter.getAttribute('data-target'));
+              const suffix = counter.getAttribute('data-suffix') || '';
+              const duration = 1600;
+              const startTime = performance.now();
+
+              function updateCount(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                // Ease-out cubic
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const currentVal = Math.round(easeOut * target);
+
+                if (suffix === '.0★') {
+                  counter.textContent = (easeOut * 5).toFixed(1) + '★';
+                } else {
+                  counter.textContent = currentVal + suffix;
+                }
+
+                if (progress < 1) {
+                  requestAnimationFrame(updateCount);
+                } else {
+                  if (suffix === '.0★') counter.textContent = '5.0★';
+                  else counter.textContent = target + suffix;
+                }
+              }
+              requestAnimationFrame(updateCount);
+            });
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.5 });
+
+      counters.forEach(c => statsObserver.observe(c));
+    }
+
+    // 3. Dynamic Goal Selector for WhatsApp Booking
+    const goalRadios = document.querySelectorAll('.goal-radio');
+    const bookingCtaBtn = document.getElementById('booking-cta-btn');
+    if (goalRadios.length && bookingCtaBtn) {
+      goalRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          if (radio.checked) {
+            const encodedGoal = encodeURIComponent(radio.value);
+            const newHref = `https://wa.me/5585992090392?text=Ol%C3%A1%20Vladia%21%20Gostaria%20de%20agendar%20minha%20sess%C3%A3o%20de%20massoterapia%20focada%20em%3A%20${encodedGoal}.`;
+            bookingCtaBtn.setAttribute('href', newHref);
+            bookingCtaBtn.classList.add('scale-105');
+            setTimeout(() => bookingCtaBtn.classList.remove('scale-105'), 200);
+          }
+        });
+      });
+    }
+
+    // 4. Subtle Header blur & shadow elevation on scroll
+    const header = document.getElementById('main-header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 30) {
+        header.classList.add('shadow-md', 'bg-surface/95');
+        header.classList.remove('bg-surface/90');
+      } else {
+        header.classList.remove('shadow-md', 'bg-surface/95');
+        header.classList.add('bg-surface/90');
+      }
+    }, { passive: true });
+  });
+
+  // 5. Interactive Category Filtering with smooth state transitions
+  function filterCategory(category) {
+    const cards = document.querySelectorAll('.service-card');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    // Reset button styles to inactive
+    filterButtons.forEach(btn => {
+      btn.className = 'filter-btn px-5 py-2.5 text-xs md:text-sm font-medium rounded-full transition-all duration-300 text-[#7c6f64] hover:text-[#2c2520] hover:bg-[#dfd3c5] whitespace-nowrap active:scale-95';
+    });
+
+    // Set active button style
+    const activeBtn = document.getElementById('btn-' + category);
+    if (activeBtn) {
+      activeBtn.className = 'filter-btn px-5 py-2.5 text-xs md:text-sm font-semibold rounded-full transition-all duration-300 bg-gradient-to-r from-primary to-[#d4a373] text-white shadow-md whitespace-nowrap active:scale-95';
+    }
+
+    // Animate filtering smoothly
+    cards.forEach(card => {
+      const match = category === 'all' || card.getAttribute('data-cat') === category;
+      if (match) {
+        card.style.display = 'flex';
+        setTimeout(() => {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0) scale(1)';
+        }, 30);
+      } else {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(12px) scale(0.96)';
+        setTimeout(() => {
+          card.style.display = 'none';
+        }, 250);
+      }
+    });
+  }
+</script>
+
+
+<div id="booking-modal-backdrop" class="fixed inset-0 z-50 bg-[#231d19]/70 backdrop-blur-md hidden items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto transition-opacity duration-300 opacity-0" onclick="handleBookingBackdropClick(event)"><div id="booking-modal-card" class="relative w-full max-w-[620px] bg-white rounded-3xl shadow-2xl border border-primary/20 overflow-hidden transform transition-all duration-300 scale-95 my-auto max-h-[92vh] flex flex-col"><div class="relative bg-gradient-to-r from-[#352518] to-[#453222] text-white p-5 sm:p-6 flex items-center justify-between shrink-0"><div class="flex items-center gap-3"><div class="w-11 h-11 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-[#d4a373] border border-white/15"><span class="material-symbols-outlined text-[24px]">calendar_month</span></div><div><div class="flex items-center gap-2"><span class="font-label-sm text-[10px] uppercase tracking-widest text-[#d4a373] font-bold">RESERVA INDIVIDUAL</span><span class="px-2 py-0.5 rounded-full bg-white/10 text-[10px] text-white/80">Hora Marcada</span></div><h2 class="font-headline-sm text-[20px] sm:text-[22px] font-semibold text-white leading-tight mt-0.5">Agendar com Vladia Brito</h2></div></div><button type="button" onclick="closeBookingModal()" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all hover:scale-105 active:scale-95 focus:outline-none" aria-label="Fechar modal de agendamento"><span class="material-symbols-outlined text-[20px]">close</span></button></div><div class="p-5 sm:p-6 overflow-y-auto flex-1 flex flex-col gap-5 bg-[#fcf9f6]"><div class="flex flex-col gap-2"><div class="flex items-center justify-between"><label class="font-label-sm uppercase tracking-wider text-[#7c6f64] text-[11px] font-bold flex items-center gap-1"><span class="material-symbols-outlined text-[15px] text-primary">today</span> Escolha o Melhor Dia da Semana</label><span class="text-[11px] text-secondary">Segunda a Sábado</span></div><div class="grid grid-cols-3 sm:grid-cols-6 gap-2" id="bm-days-container"><button type="button" onclick="selectBookingDay(this, 'Segunda-feira')" class="bm-day-btn p-2.5 rounded-xl border border-[#ebdccf] bg-white hover:border-primary text-center transition-all duration-200 active:scale-95"><span class="block text-[11px] text-secondary">SEG</span><span class="block text-[13px] font-bold text-[#231d19]">Manhã/Tarde</span></button><button type="button" onclick="selectBookingDay(this, 'Terça-feira')" class="bm-day-btn p-2.5 rounded-xl border border-[#ebdccf] bg-white hover:border-primary text-center transition-all duration-200 active:scale-95"><span class="block text-[11px] text-secondary">TER</span><span class="block text-[13px] font-bold text-[#231d19]">Manhã/Tarde</span></button><button type="button" onclick="selectBookingDay(this, 'Quarta-feira')" class="bm-day-btn p-2.5 rounded-xl border border-[#ebdccf] bg-white hover:border-primary text-center transition-all duration-200 active:scale-95"><span class="block text-[11px] text-secondary">QUA</span><span class="block text-[13px] font-bold text-[#231d19]">Manhã/Tarde</span></button><button type="button" onclick="selectBookingDay(this, 'Quinta-feira')" class="bm-day-btn p-2.5 rounded-xl border border-[#ebdccf] bg-white hover:border-primary text-center transition-all duration-200 active:scale-95"><span class="block text-[11px] text-secondary">QUI</span><span class="block text-[13px] font-bold text-[#231d19]">Manhã/Tarde</span></button><button type="button" onclick="selectBookingDay(this, 'Sexta-feira')" class="bm-day-btn p-2.5 rounded-xl border border-[#ebdccf] bg-white hover:border-primary text-center transition-all duration-200 active:scale-95"><span class="block text-[11px] text-secondary">SEX</span><span class="block text-[13px] font-bold text-[#231d19]">Manhã/Tarde</span></button><button type="button" onclick="selectBookingDay(this, 'Sábado')" class="bm-day-btn p-2.5 rounded-xl border border-[#ebdccf] bg-white hover:border-primary text-center transition-all duration-200 active:scale-95"><span class="block text-[11px] text-secondary">SÁB</span><span class="block text-[13px] font-bold text-[#231d19]">Até 14h</span></button></div></div><div class="flex flex-col gap-2"><label class="font-label-sm uppercase tracking-wider text-[#7c6f64] text-[11px] font-bold flex items-center gap-1"><span class="material-symbols-outlined text-[15px] text-primary">schedule</span> Turno ou Horário de Preferência</label><div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="bm-time-container"><button type="button" onclick="selectBookingSlot(this, 'Manhã (08h às 12h)')" class="bm-slot-btn p-2.5 rounded-xl border border-[#ebdccf] bg-white hover:border-primary text-center transition-all duration-200 active:scale-95 text-[12px] font-semibold text-[#231d19]">08:00 - 12:00</button><button type="button" onclick="selectBookingSlot(this, 'Início da Tarde (13h às 16h)')" class="bm-slot-btn p-2.5 rounded-xl border border-[#ebdccf] bg-white hover:border-primary text-center transition-all duration-200 active:scale-95 text-[12px] font-semibold text-[#231d19]">13:00 - 16:00</button><button type="button" onclick="selectBookingSlot(this, 'Final de Tarde (16h às 19h)')" class="bm-slot-btn p-2.5 rounded-xl border border-[#ebdccf] bg-white hover:border-primary text-center transition-all duration-200 active:scale-95 text-[12px] font-semibold text-[#231d19]">16:00 - 19:00</button><button type="button" onclick="selectBookingSlot(this, 'Horário a Combinar')" class="bm-slot-btn p-2.5 rounded-xl border border-[#ebdccf] bg-white hover:border-primary text-center transition-all duration-200 active:scale-95 text-[12px] font-semibold text-[#231d19]">A Combinar</button></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5"><div class="flex flex-col gap-1"><label class="font-label-sm uppercase tracking-wider text-[#7c6f64] text-[11px] font-bold" for="bm-name">Seu Nome Completo *</label><input type="text" id="bm-name" placeholder="Como podemos te chamar?" required="" autocomplete="name" class="w-full px-4 py-3 rounded-xl bg-white border border-[#ebdccf] text-[#231d19] text-[14px] placeholder-[#8d786c] focus:outline-none focus:ring-2 focus:ring-[#7a573b] transition-all shadow-sm"></div><div class="flex flex-col gap-1"><label class="font-label-sm uppercase tracking-wider text-[#7c6f64] text-[11px] font-bold" for="bm-phone">WhatsApp / Celular *</label><input type="tel" id="bm-phone" placeholder="(85) 90000-0000" required="" autocomplete="tel" inputmode="tel" class="w-full px-4 py-3 rounded-xl bg-white border border-[#ebdccf] text-[#231d19] text-[14px] placeholder-[#8d786c] focus:outline-none focus:ring-2 focus:ring-[#7a573b] transition-all shadow-sm"></div></div><div class="flex flex-col gap-1"><label class="font-label-sm uppercase tracking-wider text-[#7c6f64] text-[11px] font-bold" for="bm-notes">Observações ou Ponto de Dor (Opcional)</label><textarea id="bm-notes" rows="2" placeholder="Ex: dor no pescoço, estresse elevado, cansaço nas pernas..." class="w-full px-4 py-2.5 rounded-xl bg-white border border-[#ebdccf] text-[#231d19] text-[13px] placeholder-[#8d786c] focus:outline-none focus:ring-2 focus:ring-[#7a573b] transition-all resize-none shadow-sm"></textarea></div><div class="p-3.5 rounded-2xl bg-[#faf5f0] border border-[#ebdccf] flex items-center justify-between text-[12px] text-secondary"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-primary">verified_user</span><span class="">Atendimento silencioso e individual em Fortaleza — CE</span></div><span class="font-bold text-[#3d2315]">Sem taxa prévia</span></div><div class="pt-1 flex flex-col gap-2"><button type="button" onclick="submitBookingToWhatsApp()" class="shimmer-btn w-full py-4 rounded-full bg-gradient-to-r from-primary via-[#e0b088] to-primary hover:from-[#ba825e] hover:to-primary text-white font-label-md font-bold uppercase tracking-wider text-[13px] flex items-center justify-center gap-2.5 shadow-lg hover:shadow-xl transition-all duration-300 transform active:scale-95 cursor-pointer"><span class="material-symbols-outlined text-[20px]">chat</span><span class="">CONFIRMAR AGENDAMENTO VIA WHATSAPP</span></button><p class="text-center text-[11px] text-[#8d786c]">Ao clicar, a conversa oficial com Vladia Brito será aberta com seus dados pré-preenchidos.</p></div></div></div></div><script class="">let selectedBookingDay = 'Segunda-feira'; let selectedBookingSlot = 'Manhã (08h às 12h)'; let selectedBookingService = 'Massagem Relaxante'; function openBookingModal(defaultService) { if (defaultService) selectedBookingService = defaultService; const firstDayBtn = document.querySelector('#bm-days-container .bm-day-btn'); if (firstDayBtn) selectBookingDay(firstDayBtn, 'Segunda-feira'); const firstSlotBtn = document.querySelector('#bm-time-container .bm-slot-btn'); if (firstSlotBtn) selectBookingSlot(firstSlotBtn, 'Manhã (08h às 12h)'); const backdrop = document.getElementById('booking-modal-backdrop'); const card = document.getElementById('booking-modal-card'); if (backdrop && card) { backdrop.classList.remove('hidden'); backdrop.classList.add('flex'); setTimeout(() => { backdrop.classList.remove('opacity-0'); backdrop.classList.add('opacity-100'); card.classList.remove('scale-95'); card.classList.add('scale-100'); }, 20); document.body.style.overflow = 'hidden'; } } function closeBookingModal() { const backdrop = document.getElementById('booking-modal-backdrop'); const card = document.getElementById('booking-modal-card'); if (backdrop && card) { backdrop.classList.remove('opacity-100'); backdrop.classList.add('opacity-0'); card.classList.remove('scale-100'); card.classList.add('scale-95'); setTimeout(() => { backdrop.classList.remove('flex'); backdrop.classList.add('hidden'); document.body.style.overflow = ''; }, 280); } } function handleBookingBackdropClick(event) { if (event.target === document.getElementById('booking-modal-backdrop')) { closeBookingModal(); } } function selectBookingDay(btn, dayName) { selectedBookingDay = dayName; document.querySelectorAll('#bm-days-container .bm-day-btn').forEach(b => { b.className = 'bm-day-btn p-2.5 rounded-xl border border-[#ebdccf] bg-white hover:border-primary text-center transition-all duration-200 active:scale-95'; }); btn.className = 'bm-day-btn p-2.5 rounded-xl border-2 border-primary bg-[#fdf5ee] text-center transition-all duration-200 active:scale-95 shadow-sm'; } function selectBookingSlot(btn, slotName) { selectedBookingSlot = slotName; document.querySelectorAll('#bm-time-container .bm-slot-btn').forEach(b => { b.className = 'bm-slot-btn p-2.5 rounded-xl border border-[#ebdccf] bg-white hover:border-primary text-center transition-all duration-200 active:scale-95 text-[12px] font-semibold text-[#231d19]'; }); btn.className = 'bm-slot-btn p-2.5 rounded-xl border-2 border-primary bg-[#352518] text-white text-center transition-all duration-200 active:scale-95 text-[12px] font-semibold shadow-sm'; } function openBookingFromDetailModal() { const currentTitle = document.getElementById('modal-service-title')?.textContent || ''; closeServiceModal(); setTimeout(() => { openBookingModal(currentTitle); }, 250); } function submitBookingToWhatsApp() { const name = document.getElementById('bm-name')?.value?.trim(); const phone = document.getElementById('bm-phone')?.value?.trim(); const service = selectedBookingService; const notes = document.getElementById('bm-notes')?.value?.trim() || 'Nenhuma'; if (!name) { alert('Por favor, informe seu nome completo.'); document.getElementById('bm-name')?.focus(); return; } if (!phone) { alert('Por favor, informe seu WhatsApp para confirmação.'); document.getElementById('bm-phone')?.focus(); return; } let msg = 'Olá, Vladia Brito! Gostaria de agendar um atendimento na VB Massoterapia.\n\n'; msg += 'Procedimento: ' + service + '\n'; msg += 'Dia de preferência: ' + selectedBookingDay + '\n'; msg += 'Turno/horário: ' + selectedBookingSlot + '\n'; msg += 'Nome: ' + name + '\n'; msg += 'WhatsApp: ' + phone + '\n'; if (notes && notes !== 'Nenhuma') msg += 'Observações: ' + notes + '\n'; const url = 'https://wa.me/5585992090392?text=' + encodeURIComponent(msg); window.open(url, '_blank'); closeBookingModal(); } document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeBookingModal(); } });</script>
+
+
+
+
+
+<script>
+(function () {
+  const menu = document.getElementById('mobile-menu');
+  const btn = document.getElementById('mobile-menu-btn');
+  const icon = document.getElementById('mobile-menu-icon');
+  const backdrop = document.getElementById('mobile-menu-backdrop');
+  const panel = document.getElementById('mobile-menu-panel');
+  if (!menu || !btn || !backdrop || !panel) return;
+
+  let isOpen = false;
+  let closeTimer = null;
+
+  function setMenu(open) {
+    isOpen = open;
+    window.clearTimeout(closeTimer);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
+    if (icon) icon.textContent = open ? 'close' : 'menu';
+
+    if (open) {
+      menu.classList.remove('hidden');
+      menu.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('menu-open');
+      requestAnimationFrame(() => {
+        backdrop.classList.remove('opacity-0');
+        backdrop.classList.add('opacity-100');
+        panel.classList.remove('opacity-0', '-translate-y-2');
+        panel.classList.add('opacity-100', 'translate-y-0');
+      });
+    } else {
+      backdrop.classList.remove('opacity-100');
+      backdrop.classList.add('opacity-0');
+      panel.classList.remove('opacity-100', 'translate-y-0');
+      panel.classList.add('opacity-0', '-translate-y-2');
+      document.body.classList.remove('menu-open');
+      closeTimer = window.setTimeout(() => {
+        if (!isOpen) {
+          menu.classList.add('hidden');
+          menu.setAttribute('aria-hidden', 'true');
+        }
+      }, 250);
+    }
+  }
+
+  window.openMobileMenu = () => setMenu(true);
+  window.closeMobileMenu = () => setMenu(false);
+
+  btn.addEventListener('click', () => setMenu(!isOpen));
+  backdrop.addEventListener('click', () => setMenu(false));
+  menu.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener('click', () => setMenu(false));
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && isOpen) setMenu(false);
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 1280 && isOpen) setMenu(false);
+  });
+})();
+</script>
+<script>(function(){const loader=document.getElementById('preloader-vb');if(!loader)return;const started=performance.now();let finished=false;function finish(){if(finished)return;finished=true;const wait=Math.max(0,1500-(performance.now()-started));window.setTimeout(()=>loader.classList.add('is-hidden'),wait)}if(document.readyState==='complete')finish();else window.addEventListener('load',finish,{once:true});window.setTimeout(finish,5000)})();</script>
+</body></html>
+
+
+
+
+[executed on device: DESKTOP-KLE5H9J (168b2f0a-d4ca-4bf3-b8f9-8f7d9a490a36)]
+
+
+
+
+
